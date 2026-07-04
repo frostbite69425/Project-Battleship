@@ -28,9 +28,11 @@ class Ship {
     const hits = this.hits;
     const length = this.length;
     if (hits >= length) {
-      return true;
+      this.#hasSunk = true;
+      return this.#hasSunk;
     } else {
-      return false;
+      this.#hasSunk = false;
+      return this.#hasSunk;
     }
   }
 }

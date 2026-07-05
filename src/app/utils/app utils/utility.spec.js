@@ -100,20 +100,14 @@ describe("Board populator logic", () => {
     expect(populatedBoard[49]).toEqual({
       x: "E",
       y: 10,
-      occupied: false,
-      shot: false,
     });
     expect(populatedBoard[79]).toEqual({
       x: "H",
       y: 10,
-      occupied: false,
-      shot: false,
     });
     expect(populatedBoard[63]).toEqual({
       x: "G",
       y: 4,
-      occupied: false,
-      shot: false,
     });
   });
 
@@ -127,6 +121,22 @@ describe("Board populator logic", () => {
     let grid = populatedBoard[5];
     grid.shoot();
     expect(grid.shot).toBe(true);
+  });
+
+  test("board populator throws when occupy() runs on an already occupied grid.", () => {
+    let grid = populatedBoard[0];
+    grid.occupy();
+    expect(() => {
+      grid.occupy();
+    }).toThrow;
+  });
+
+  test("board populator throws when shoot() runs on an already shot grid.", () => {
+    let grid = populatedBoard[0];
+    grid.shoot();
+    expect(() => {
+      grid.shoot();
+    }).toThrow;
   });
 });
 
@@ -143,8 +153,6 @@ describe("GameBoard logic", () => {
     expect(board.gameBoard[0]).toEqual({
       x: "A",
       y: 1,
-      occupied: false,
-      shot: false,
     });
   });
 });

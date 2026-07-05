@@ -1,14 +1,36 @@
 class BoardCoordinate {
+  #taken;
+  #hit;
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.occupied = false;
-    this.shot = false;
+    this.#taken = false;
+    this.#hit = false;
+  }
+
+  get coordinates() {
+    return [this.x, this.y];
+  }
+
+  get occupied() {
+    return this.#taken;
+  }
+
+  set #occupied(x) {
+    this.#taken = x;
+  }
+
+  get shot() {
+    return this.#hit;
+  }
+
+  set #shot(x) {
+    this.#hit = x;
   }
 
   occupy() {
     if (!this.occupied) {
-      this.occupied = true;
+      this.#occupied = true;
     } else {
       throw Error("The square is already occupied!");
     }
@@ -16,7 +38,7 @@ class BoardCoordinate {
 
   shoot() {
     if (!this.shot) {
-      this.shot = true;
+      this.#shot = true;
     } else {
       throw Error("You have already shot at this grid!");
     }

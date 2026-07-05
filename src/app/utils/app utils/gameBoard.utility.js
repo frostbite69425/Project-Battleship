@@ -5,9 +5,11 @@ import boardPopulator from "./boardPopulator.utility.js";
 const validX = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 class GameBoard {
+  #shipsOnBoard = [];
   constructor() {
     this.gameBoard = boardPopulator();
     this.ships = [];
+    this.#shipsOnBoard;
   }
 
   board() {
@@ -41,7 +43,14 @@ class GameBoard {
 
     const start = xIndex * 10 + headY - 1;
 
-    this.ships.push(ship);
+    if (this.#shipsOnBoard.includes(shipType)) {
+      throw new Error(
+        `You already have a ${shipType} on your board! Please try to place a different ship.`,
+      );
+    } else {
+      this.#shipsOnBoard.push(shipType);
+      this.ships.push(ship);
+    }
 
     if (layout === "horizontal") {
       for (let i = start; i < end[1]; i++) {
@@ -70,7 +79,9 @@ class GameBoard {
     const grid = this.gameBoard[index];
     grid.shoot();
     const ship = this.gameBoard[index].ship;
-    ship.hit();
+    if (ship !== null) {
+      ship.hit();
+    }
   }
 
   allSunk() {

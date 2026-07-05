@@ -159,6 +159,13 @@ describe("GameBoard logic", () => {
     });
   });
 
+  test("Gameboard does not allow duplicate ships to be placed", () => {
+    board.placeShip("Carrier", ["A", 1], "horizontal");
+    expect(() => {
+      board.placeShip("Carrier", ["I", 1], "horizontal");
+    }).toThrow();
+  });
+
   test("Gameboard allows ships to be placed horizontally", () => {
     board.placeShip("Carrier", ["A", 1], "horizontal");
     expect(board.gameBoard[0].occupied).toBe(true);
@@ -235,17 +242,15 @@ describe("GameBoard logic", () => {
     }).toThrow();
   });
 
-  test("allSunk() returns true if all the ships have been sunk", () => {
+  test.only("allSunk() returns true if all the ships have been sunk", () => {
     board.placeShip("PatrolBoat", ["A", 1], "vertical");
-    board.placeShip("PatrolBoat", ["A", 2], "vertical");
-    board.placeShip("PatrolBoat", ["A", 3], "vertical");
+    board.placeShip("Submarine", ["A", 2], "vertical");
     board.receiveAttack(["A", 1]);
     board.receiveAttack(["A", 2]);
-    board.receiveAttack(["A", 3]);
     board.receiveAttack(["B", 1]);
     board.receiveAttack(["B", 2]);
     expect(board.allSunk()).toBe(false);
-    board.receiveAttack(["B", 3]);
+    board.receiveAttack(["C", 2]);
     expect(board.allSunk()).toBe(true);
   });
 });

@@ -1,6 +1,8 @@
 import Ship from "./shipClass.utility.js";
 import { describe, test, expect, beforeEach } from "@jest/globals";
-import * as ShipTypes from "./shipTypeClass.utility.js";
+import * as shipTypes from "./shipTypeClass.utility.js";
+import boardPopulator from "./boardPopulator.utility.js";
+import GameBoard from "./gameBoard.utility.js";
 
 let ship;
 let carrier;
@@ -8,6 +10,7 @@ let battleship;
 let destroyer;
 let submarine;
 let patrolBoat;
+let populatedBoard;
 
 describe("Ship logic", () => {
   beforeEach(() => {
@@ -52,11 +55,11 @@ describe("Ship logic", () => {
 
 describe("Ship types logic", () => {
   beforeEach(() => {
-    carrier = new ShipTypes.Carrier();
-    battleship = new ShipTypes.Battleship();
-    destroyer = new ShipTypes.Destroyer();
-    submarine = new ShipTypes.Submarine();
-    patrolBoat = new ShipTypes.PatrolBoat();
+    carrier = new shipTypes.Carrier();
+    battleship = new shipTypes.Battleship();
+    destroyer = new shipTypes.Destroyer();
+    submarine = new shipTypes.Submarine();
+    patrolBoat = new shipTypes.PatrolBoat();
   });
 
   test("Different shiptypes return the correct length", () => {
@@ -84,5 +87,44 @@ describe("Ship types logic", () => {
     expect(destroyer.isSunk()).toBe(false);
     expect(submarine.isSunk()).toBe(false);
     expect(patrolBoat.isSunk()).toBe(true);
+  });
+});
+
+describe("Board populator logic", () => {
+  beforeEach(() => {
+    populatedBoard = boardPopulator();
+  });
+
+  test("board populator populates the board with 100 unoccupied and unshot coordinates", () => {
+    expect(populatedBoard[49]).toEqual({
+      x: "E",
+      y: 10,
+      occupied: false,
+      shot: false,
+    });
+    expect(populatedBoard[79]).toEqual({
+      x: "H",
+      y: 10,
+      occupied: false,
+      shot: false,
+    });
+    expect(populatedBoard[63]).toEqual({
+      x: "G",
+      y: 4,
+      occupied: false,
+      shot: false,
+    });
+  });
+
+  test("board populator is able to change occupied states", () => {
+    let grid = populatedBoard[5];
+    grid.occupy();
+    expect(grid.occupied).toBe(true);
+  });
+
+  test("board populator is able to change shot states", () => {
+    let grid = populatedBoard[5];
+    grid.shoot();
+    expect(grid.shot).toBe(true);
   });
 });

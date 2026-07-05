@@ -1,11 +1,21 @@
 class BoardCoordinate {
   #taken;
   #hit;
+  #shipType;
   constructor(x, y) {
     this.x = x;
     this.y = y;
     this.#taken = false;
     this.#hit = false;
+    this.#shipType = null;
+  }
+
+  get ship() {
+    return this.#shipType;
+  }
+
+  set ship(x) {
+    this.#shipType = x;
   }
 
   get coordinates() {

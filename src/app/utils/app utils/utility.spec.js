@@ -11,6 +11,7 @@ let destroyer;
 let submarine;
 let patrolBoat;
 let populatedBoard;
+let board;
 
 describe("Ship logic", () => {
   beforeEach(() => {
@@ -126,5 +127,24 @@ describe("Board populator logic", () => {
     let grid = populatedBoard[5];
     grid.shoot();
     expect(grid.shot).toBe(true);
+  });
+});
+
+describe("GameBoard logic", () => {
+  beforeEach(() => {
+    board = new GameBoard();
+  });
+
+  test("gameBoard instantiates with the gameboard property containing the populated board", () => {
+    expect(Object.hasOwn(board, "gameBoard")).toBe(true);
+  });
+
+  test("gameBoard's board is accessible from the public interface and can return values", () => {
+    expect(board.gameBoard[0]).toEqual({
+      x: "A",
+      y: 1,
+      occupied: false,
+      shot: false,
+    });
   });
 });

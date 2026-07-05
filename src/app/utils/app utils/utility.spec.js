@@ -193,4 +193,56 @@ describe("GameBoard logic", () => {
       board.placeShip("aslkhc", ["Z", 101], "vertical");
     }).toThrow();
   });
+
+  test("receiveAttack() takes a pair of coordinates and determines whether the attack hit a ship or if it missed", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    board.receiveAttack(["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[0].shot).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[10].shot).toBe(false);
+  });
+
+  test("receiveAttack() sinks a ship if enough attacks are provided", () => {
+    board.placeShip("PatrolBoat", ["A", 1], "vertical");
+    board.receiveAttack(["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[0].shot).toBe(true);
+    expect(board.gameBoard[0].ship.isSunk()).toBe(false);
+    board.receiveAttack(["B", 1]);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[10].shot).toBe(true);
+    expect(board.gameBoard[0].ship.isSunk()).toBe(true);
+  });
+
+  test("receiveAttack() throws when invalid pair of coordinates are provided", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    expect(() => {
+      board.receiveAttack(["A", 0]);
+    }).toThrow();
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[0].shot).toBe(false);
+  });
+
+  test("receiveAttack() throws if the same grid is attacked twice", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    board.receiveAttack(["A", 1]);
+    expect(() => {
+      board.receiveAttack(["A", 1]);
+    }).toThrow();
+  });
+
+  test("allSunk() returns true if all the ships have been sunk", () => {
+    board.placeShip("PatrolBoat", ["A", 1], "vertical");
+    board.placeShip("PatrolBoat", ["A", 2], "vertical");
+    board.placeShip("PatrolBoat", ["A", 3], "vertical");
+    board.receiveAttack(["A", 1]);
+    board.receiveAttack(["A", 2]);
+    board.receiveAttack(["A", 3]);
+    board.receiveAttack(["B", 1]);
+    board.receiveAttack(["B", 2]);
+    expect(board.allSunk()).toBe(false);
+    board.receiveAttack(["B", 3]);
+    expect(board.allSunk()).toBe(true);
+  });
 });

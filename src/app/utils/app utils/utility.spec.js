@@ -3,6 +3,7 @@ import { describe, test, expect, beforeEach } from "@jest/globals";
 import * as shipTypes from "./shipTypeClass.utility.js";
 import boardPopulator from "./boardPopulator.utility.js";
 import GameBoard from "./gameBoard.utility.js";
+import Player from "./player.utility.js";
 
 let ship;
 let carrier;
@@ -12,6 +13,8 @@ let submarine;
 let patrolBoat;
 let populatedBoard;
 let board;
+let human;
+let computer;
 
 describe("Ship logic", () => {
   beforeEach(() => {
@@ -244,5 +247,21 @@ describe("GameBoard logic", () => {
     expect(board.allSunk()).toBe(false);
     board.receiveAttack(["B", 3]);
     expect(board.allSunk()).toBe(true);
+  });
+});
+
+describe("Player logic", () => {
+  beforeEach(() => {
+    human = new Player(true);
+    computer = new Player();
+  });
+
+  test("Player instantiates with a gameBoard", () => {
+    expect(human.gameBoard).toBeTruthy();
+  });
+
+  test("Player instantiates with correct types", () => {
+    expect(human.type).toBe("human");
+    expect(computer.type).toBe("computer");
   });
 });

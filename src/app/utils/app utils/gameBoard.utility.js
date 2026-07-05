@@ -10,6 +10,10 @@ class GameBoard {
     this.ships = [];
   }
 
+  board() {
+    return this.gameBoard;
+  }
+
   placeShip(shipType, head, orientation) {
     let ship = new shipTypes[shipType]();
     let [headX, headY] = head;

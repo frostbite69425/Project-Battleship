@@ -136,7 +136,7 @@ describe("Board populator logic", () => {
     grid.shoot();
     expect(() => {
       grid.shoot();
-    }).toThrow;
+    }).toThrow();
   });
 });
 
@@ -145,14 +145,52 @@ describe("GameBoard logic", () => {
     board = new GameBoard();
   });
 
-  test("gameBoard instantiates with the gameboard property containing the populated board", () => {
+  test("GameBoard instantiates with the gameboard property containing the populated board", () => {
     expect(Object.hasOwn(board, "gameBoard")).toBe(true);
   });
 
-  test("gameBoard's board is accessible from the public interface and can return values", () => {
+  test("GameBoard's board is accessible from the public interface and can return values", () => {
     expect(board.gameBoard[0]).toEqual({
       x: "A",
       y: 1,
     });
+  });
+
+  test("Gameboard allows ships to be placed horizontally", () => {
+    board.placeShip("Carrier", ["A", 1], "horizontal");
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[1].occupied).toBe(true);
+    expect(board.gameBoard[2].occupied).toBe(true);
+    expect(board.gameBoard[3].occupied).toBe(true);
+    expect(board.gameBoard[4].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(false);
+  });
+
+  test("Gameboard allows ships to be placed vertically", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[20].occupied).toBe(true);
+    expect(board.gameBoard[30].occupied).toBe(true);
+    expect(board.gameBoard[40].occupied).toBe(true);
+    expect(board.gameBoard[90].occupied).toBe(false);
+  });
+
+  test("Gameboard throws when non existent ships are invoked", () => {
+    expect(() => {
+      board.placeShip("aslkhc", ["A", 1], "vertical");
+    }).toThrow();
+  });
+
+  test("Gameboard throws when non existent orientations are invoked", () => {
+    expect(() => {
+      board.placeShip("aslkhc", ["A", 1], "diagonal");
+    }).toThrow();
+  });
+
+  test("Gameboard throws when invalid start coordinates are used", () => {
+    expect(() => {
+      board.placeShip("aslkhc", ["Z", 101], "vertical");
+    }).toThrow();
   });
 });

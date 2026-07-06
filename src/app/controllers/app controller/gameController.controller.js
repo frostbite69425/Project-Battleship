@@ -5,6 +5,8 @@ let defender;
 
 class Game {
   #turn;
+  #playerOneSetup;
+  #playerTwoSetup;
   constructor(
     singlePlayer = true,
     playerOneName = "player",
@@ -20,6 +22,8 @@ class Game {
     this.playerTwo.name = playerTwoName;
     this.singlePlayer = singlePlayer;
     this.#turn = 1;
+    this.#playerOneSetup = false;
+    this.#playerTwoSetup = false;
   }
 
   setup(player, ...positions) {
@@ -38,11 +42,28 @@ class Game {
       let [shipType, coordinates, orientation] = position;
       activePlayer.gameBoard.placeShip(shipType, coordinates, orientation);
     }
+
+    if (
+      activePlayer === this.playerOne &&
+      this.playerOne.gameBoard.shipsPlaced().length === 5
+    ) {
+      this.#playerOneSetup = true;
+    } else if (
+      activePlayer === this.playerTwo &&
+      this.playerTwo.gameBoard.shipsPlaced().length === 5
+    ) {
+      this.#playerTwoSetup = true;
+    }
   }
 
   playRound([x, y]) {
     attacker = this.playerOne;
     defender = this.playerTwo;
+    if (!this.#playerOneSetup || !this.#playerTwoSetup) {
+      throw new Error(
+        `Cannot play round without first setting up the ships for both players!`,
+      );
+    }
     if (this.#turn % 2 === 0) {
       defender = this.playerOne;
       attacker = this.playerTwo;

@@ -359,25 +359,89 @@ describe("Game logic", () => {
   });
 
   test("playRound() continues till all the ships of one of the player sinks", () => {
-    game.setup("Frost", ["PatrolBoat", ["A", 1], "vertical"]);
+    game.setup(
+      "Frost",
+      ["Carrier", ["A", 1], "vertical"],
+      ["Battleship", ["A", 2], "vertical"],
+      ["Submarine", ["A", 3], "vertical"],
+      ["Destroyer", ["A", 4], "vertical"],
+      ["PatrolBoat", ["A", 5], "vertical"],
+    );
 
-    game.setup("Bot 1", ["PatrolBoat", ["C", 1], "vertical"]);
+    game.setup(
+      "Bot 1",
+      ["Carrier", ["F", 1], "vertical"],
+      ["Battleship", ["F", 2], "vertical"],
+      ["Submarine", ["F", 3], "vertical"],
+      ["Destroyer", ["F", 4], "vertical"],
+      ["PatrolBoat", ["F", 5], "vertical"],
+    );
 
-    game.playRound(["C", 1]);
-    expect(game.playerTwo.shot(["C", 1])).toBe(true);
-    expect(game.playerTwo.shipHit(["C", 1])).toBe(true);
+    game.playRound(["F", 1]);
+    expect(game.playerTwo.shot(["F", 1])).toBe(true);
+    expect(game.playerTwo.shipHit(["F", 1])).toBe(true);
     expect(game.playerTwo.allShipsSunk()).toBe(false);
 
-    game.playRound(["A", 1]); // playerTwo shoots at playerOne @ F, 2
+    game.playRound(["A", 1]);
     expect(game.playerOne.shot(["A", 1])).toBe(true);
     expect(game.playerOne.shipHit(["A", 1])).toBe(true);
     expect(game.playerOne.allShipsSunk()).toBe(false);
 
-    game.playRound(["D", 1]);
-    expect(game.playerTwo.shot(["D", 1])).toBe(true);
-    expect(game.playerTwo.shipHit(["D", 1])).toBe(true);
-    expect(game.playerTwo.allShipsSunk()).toBe(true);
+    game.playRound(["G", 1]);
+    expect(game.playerTwo.shot(["G", 1])).toBe(true);
+    expect(game.playerTwo.shipHit(["G", 1])).toBe(true);
+    expect(game.playerTwo.allShipsSunk()).toBe(false);
 
-    expect(game.playRound(["F", 1])).toBe("Game over! Frost wins!");
+    game.playRound(["B", 1]);
+    game.playRound(["H", 1]);
+    game.playRound(["C", 1]);
+    game.playRound(["I", 1]);
+    game.playRound(["D", 1]);
+
+    game.playRound(["J", 1]);
+
+    game.playRound(["E", 1]);
+    game.playRound(["F", 2]);
+    game.playRound(["A", 2]);
+    game.playRound(["G", 2]);
+    game.playRound(["B", 2]);
+    game.playRound(["H", 2]);
+    game.playRound(["C", 2]);
+
+    game.playRound(["I", 2]);
+
+    game.playRound(["D", 2]);
+    game.playRound(["F", 3]);
+    game.playRound(["A", 3]);
+    game.playRound(["G", 3]);
+    game.playRound(["B", 3]);
+
+    game.playRound(["H", 3]);
+
+    game.playRound(["C", 3]);
+    game.playRound(["F", 4]);
+    game.playRound(["A", 4]);
+    game.playRound(["G", 4]);
+    game.playRound(["B", 4]);
+
+    game.playRound(["H", 4]);
+
+    game.playRound(["C", 4]);
+    game.playRound(["F", 5]);
+    game.playRound(["A", 5]);
+    game.playRound(["G", 5]);
+
+    expect(game.playRound(["B", 5])).toBe("Game over! Frost wins!");
+  });
+
+  test("playRound() throws for ships not being set up for both players", () => {
+    let newGame = new Game(false, "Boo", "Booger");
+    newGame.setup("Boo", ["PatrolBoat", ["A", 1], "vertical"]);
+
+    newGame.setup("Booger", ["PatrolBoat", ["C", 1], "vertical"]);
+
+    expect(() => {
+      newGame.playRound(["C", 1]);
+    }).toThrow();
   });
 });

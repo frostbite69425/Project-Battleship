@@ -4,6 +4,7 @@ import * as shipTypes from "./shipTypeClass.utility.js";
 import boardPopulator from "./boardPopulator.utility.js";
 import GameBoard from "./gameBoard.utility.js";
 import Player from "./player.utility.js";
+import Game from "../../controllers/app controller/gameController.controller.js";
 
 let ship;
 let carrier;
@@ -15,6 +16,7 @@ let populatedBoard;
 let board;
 let human;
 let computer;
+let game;
 
 describe("Ship logic", () => {
   beforeEach(() => {
@@ -242,7 +244,7 @@ describe("GameBoard logic", () => {
     }).toThrow();
   });
 
-  test.only("allSunk() returns true if all the ships have been sunk", () => {
+  test("allSunk() returns true if all the ships have been sunk", () => {
     board.placeShip("PatrolBoat", ["A", 1], "vertical");
     board.placeShip("Submarine", ["A", 2], "vertical");
     board.receiveAttack(["A", 1]);
@@ -268,5 +270,114 @@ describe("Player logic", () => {
   test("Player instantiates with correct types", () => {
     expect(human.type).toBe("human");
     expect(computer.type).toBe("computer");
+  });
+});
+
+describe("Game logic", () => {
+  beforeEach(() => {
+    game = new Game(true, "Frost");
+  });
+
+  test("setup() allows each ship to be placed on the board until all the ships have been placed by both the players", () => {
+    game.setup(
+      "Frost",
+      ["Carrier", ["A", 1], "vertical"],
+      ["Battleship", ["A", 2], "vertical"],
+      ["Submarine", ["A", 3], "vertical"],
+      ["Destroyer", ["A", 4], "vertical"],
+      ["PatrolBoat", ["A", 5], "vertical"],
+    );
+    game.setup(
+      "Bot 1",
+      ["Carrier", ["F", 1], "vertical"],
+      ["Battleship", ["F", 2], "vertical"],
+      ["Submarine", ["F", 3], "vertical"],
+      ["Destroyer", ["F", 4], "vertical"],
+      ["PatrolBoat", ["F", 5], "vertical"],
+    );
+
+    expect(game.playerOne.gameBoard.shipsPlaced().length).toBe(5);
+    expect(game.playerTwo.gameBoard.shipsPlaced().length).toBe(5);
+  });
+
+  test("setup() throws when an invalid playerName is passed", () => {
+    expect(() => {
+      game.setup(
+        "Jake",
+        ["Carrier", ["A", 1], "vertical"],
+        ["Battleship", ["A", 2], "vertical"],
+        ["Submarine", ["A", 3], "vertical"],
+        ["Destroyer", ["A", 4], "vertical"],
+        ["PatrolBoat", ["A", 5], "vertical"],
+      );
+    }).toThrow();
+  });
+
+  test("setup() allows one ship to be placed at a time", () => {
+    game.setup("Frost", ["Carrier", ["A", 1], "vertical"]);
+    game.setup("Frost", ["Battleship", ["A", 2], "vertical"]);
+    game.setup("Frost", ["Submarine", ["A", 3], "vertical"]);
+    game.setup("Frost", ["Destroyer", ["A", 4], "vertical"]);
+    game.setup("Frost", ["PatrolBoat", ["A", 5], "vertical"]);
+    expect(game.playerOne.gameBoard.shipsPlaced().length).toBe(5);
+  });
+
+  test("setup() throws when more than one ship of the same type is placed", () => {
+    game.setup("Frost", ["Carrier", ["A", 1], "vertical"]);
+
+    expect(() => {
+      game.setup("Frost", ["Carrier", ["A", 1], "vertical"]);
+    }).toThrow();
+  });
+
+  test("playRound() allows one player to attack the other player's board", () => {
+    game.setup(
+      "Frost",
+      ["Carrier", ["A", 1], "vertical"],
+      ["Battleship", ["A", 2], "vertical"],
+      ["Submarine", ["A", 3], "vertical"],
+      ["Destroyer", ["A", 4], "vertical"],
+      ["PatrolBoat", ["A", 5], "vertical"],
+    );
+
+    game.setup(
+      "Bot 1",
+      ["Carrier", ["F", 1], "vertical"],
+      ["Battleship", ["F", 2], "vertical"],
+      ["Submarine", ["F", 3], "vertical"],
+      ["Destroyer", ["F", 4], "vertical"],
+      ["PatrolBoat", ["F", 5], "vertical"],
+    );
+
+    game.playRound(["A", 1]); // playerOne shoots at playerTwo @ A, 1
+    expect(game.playerTwo.shot(["A", 1])).toBe(true);
+    expect(game.playerTwo.shipHit(["A", 1])).toBe(false);
+
+    game.playRound(["A", 1]); // playerTwo shoots at playerOne @ F, 2
+    expect(game.playerOne.shot(["A", 1])).toBe(true);
+    expect(game.playerOne.shipHit(["A", 1])).toBe(true);
+  });
+
+  test("playRound() continues till all the ships of one of the player sinks", () => {
+    game.setup("Frost", ["PatrolBoat", ["A", 1], "vertical"]);
+
+    game.setup("Bot 1", ["PatrolBoat", ["C", 1], "vertical"]);
+
+    game.playRound(["C", 1]);
+    expect(game.playerTwo.shot(["C", 1])).toBe(true);
+    expect(game.playerTwo.shipHit(["C", 1])).toBe(true);
+    expect(game.playerTwo.allShipsSunk()).toBe(false);
+
+    game.playRound(["A", 1]); // playerTwo shoots at playerOne @ F, 2
+    expect(game.playerOne.shot(["A", 1])).toBe(true);
+    expect(game.playerOne.shipHit(["A", 1])).toBe(true);
+    expect(game.playerOne.allShipsSunk()).toBe(false);
+
+    game.playRound(["D", 1]);
+    expect(game.playerTwo.shot(["D", 1])).toBe(true);
+    expect(game.playerTwo.shipHit(["D", 1])).toBe(true);
+    expect(game.playerTwo.allShipsSunk()).toBe(true);
+
+    expect(game.playRound(["F", 1])).toBe("Game over! Frost wins!");
   });
 });

@@ -12,12 +12,24 @@ class GameBoard {
     this.#shipsOnBoard;
   }
 
+  shipsPlaced() {
+    return this.#shipsOnBoard;
+  }
+
   board() {
     return this.gameBoard;
   }
 
   placeShip(shipType, head, orientation) {
-    let ship = new shipTypes[shipType]();
+    let ship;
+    try {
+      ship = new shipTypes[shipType]();
+    } catch (e) {
+      throw new Error(
+        "Invalid ship type used! Please try again with a valid ship type!",
+        { cause: e },
+      );
+    }
     let [headX, headY] = head;
 
     const xIndex = validX.indexOf(headX);
@@ -91,6 +103,22 @@ class GameBoard {
       }
     }
     return true;
+  }
+
+  shipHit([x, y]) {
+    const index = validX.indexOf(x) * 10 + y - 1;
+
+    if (index < 0) {
+      throw new Error(
+        "Invalid arguments! Please provide valid grid coordinates!",
+      );
+    }
+    const ship = this.gameBoard[index].ship;
+
+    if (ship !== null) {
+      return true;
+    }
+    return false;
   }
 }
 export default GameBoard;

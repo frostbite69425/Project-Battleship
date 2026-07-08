@@ -15,7 +15,7 @@ const shipHolder = () => {
     shipHolder.domElement.appendChild(shipNamePara.domElement);
     shipHolderDiv.domElement.appendChild(shipHolder.domElement);
   }
-  shipHolderParentDiv.domElement.appendChild(
+  shipHolderParentDiv.domElement.append(
     shipHolderPara.domElement,
     shipHolderDiv.domElement,
   );

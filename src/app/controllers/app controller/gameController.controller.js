@@ -26,6 +26,10 @@ class Game {
     this.#playerTwoSetup = false;
   }
 
+  get gameMode() {
+    return this.singlePlayer;
+  }
+
   setup(player, ...positions) {
     let activePlayer;
     if (player === this.playerOne.name) {

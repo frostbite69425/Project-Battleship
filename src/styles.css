@@ -73,3 +73,31 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+.hidden {
+  display: none;
+}
+
+.parent-board-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-holder {
+  display: grid;
+  height: 500px;
+  width: 500px;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+
+  > .grid-div {
+    background-color: skyblue;
+    border: 1px, black, solid;
+    transition: all 0.2s ease-in-out;
+  }
+
+  > .grid-div:hover {
+    transform: scale(1.1);
+    border: 2px solid white;
+  }
+}

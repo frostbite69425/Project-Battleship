@@ -29,7 +29,7 @@ describe("Ship logic", () => {
       hasSunk: false,
       hits: 0,
     });
-  });
+  }); // properties made private.
 
   test("length sets and gets the length of the ship respectively", () => {
     ship.length = 5;
@@ -122,6 +122,14 @@ describe("Board populator logic", () => {
     expect(grid.occupied).toBe(true);
   });
 
+  test("board populator is able to clear occupied grids", () => {
+    let grid = populatedBoard[5];
+    grid.occupy();
+    expect(grid.occupied).toBe(true);
+    grid.clearGrid();
+    expect(grid.occupied).toBe(false);
+  });
+
   test("board populator is able to change shot states", () => {
     let grid = populatedBoard[5];
     grid.shoot();
@@ -142,6 +150,17 @@ describe("Board populator logic", () => {
     expect(() => {
       grid.shoot();
     }).toThrow();
+  });
+
+  test("headNode() returns the headNode of the boardCoordinate", () => {
+    let grid = populatedBoard[0];
+    expect(grid.headNodeIndex).toBeNull();
+  });
+
+  test("headNode(x) sets the headNode of the boardCoordinate", () => {
+    let grid = populatedBoard[0];
+    grid.headNodeIndex = "test Grid";
+    expect(grid.headNodeIndex).toBe("test Grid");
   });
 });
 
@@ -170,12 +189,24 @@ describe("GameBoard logic", () => {
 
   test("Gameboard allows ships to be placed horizontally", () => {
     board.placeShip("Carrier", ["A", 1], "horizontal");
+    board.placeShip("Submarine", ["B", 1], "horizontal");
+    board.placeShip("PatrolBoat", ["C", 1], "vertical");
+    board.placeShip("Destroyer", ["F", 1], "vertical");
     expect(board.gameBoard[0].occupied).toBe(true);
     expect(board.gameBoard[1].occupied).toBe(true);
     expect(board.gameBoard[2].occupied).toBe(true);
     expect(board.gameBoard[3].occupied).toBe(true);
     expect(board.gameBoard[4].occupied).toBe(true);
-    expect(board.gameBoard[10].occupied).toBe(false);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[60].occupied).toBe(true);
+    expect(board.gameBoard[30].occupied).toBe(true);
+  });
+
+  test("Gameboard does not allow ships to be placed in an overlapping manner", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    expect(() => {
+      board.placeShip("Submarine", ["B", 1], "horizontal");
+    }).toThrow();
   });
 
   test("Gameboard allows ships to be placed vertically", () => {
@@ -255,6 +286,77 @@ describe("GameBoard logic", () => {
     board.receiveAttack(["C", 2]);
     expect(board.allSunk()).toBe(true);
   });
+
+  test("rotateShip() takes the headNode coordinate with a ship placed on it and switches the orientation from vertical to horizontal by rotating the ship around the headNode.", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    board.rotateShip(["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(false);
+    expect(board.gameBoard[20].occupied).toBe(false);
+    expect(board.gameBoard[30].occupied).toBe(false);
+    expect(board.gameBoard[40].occupied).toBe(false);
+    expect(board.gameBoard[1].occupied).toBe(true);
+    expect(board.gameBoard[2].occupied).toBe(true);
+    expect(board.gameBoard[3].occupied).toBe(true);
+    expect(board.gameBoard[4].occupied).toBe(true);
+  });
+
+  test("rotateShip() can take in any coordinate with a ship placed on it and switches the orientation from vertical to horizontal by rotating the ship around the headNode.", () => {
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    board.rotateShip(["B", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(false);
+    expect(board.gameBoard[20].occupied).toBe(false);
+    expect(board.gameBoard[30].occupied).toBe(false);
+    expect(board.gameBoard[40].occupied).toBe(false);
+    expect(board.gameBoard[1].occupied).toBe(true);
+    expect(board.gameBoard[2].occupied).toBe(true);
+    expect(board.gameBoard[3].occupied).toBe(true);
+    expect(board.gameBoard[4].occupied).toBe(true);
+  });
+
+  test("rotateShip() takes the headNode coordinate with a ship placed on it and switches the orientation from horizontal to vertical by rotating the ship around the headNode.", () => {
+    board.placeShip("Carrier", ["A", 1], "horizontal");
+    board.rotateShip(["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[20].occupied).toBe(true);
+    expect(board.gameBoard[30].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[40].occupied).toBe(true);
+    expect(board.gameBoard[1].occupied).toBe(false);
+    expect(board.gameBoard[2].occupied).toBe(false);
+    expect(board.gameBoard[3].occupied).toBe(false);
+    expect(board.gameBoard[4].occupied).toBe(false);
+  });
+
+  test("rotateShip() can take in any coordinate with a ship placed on it and switches the orientation from horizontal to vertical by rotating the ship around the headNode.", () => {
+    board.placeShip("Carrier", ["A", 1], "horizontal");
+    board.rotateShip(["A", 3]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[20].occupied).toBe(true);
+    expect(board.gameBoard[30].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[40].occupied).toBe(true);
+    expect(board.gameBoard[1].occupied).toBe(false);
+    expect(board.gameBoard[2].occupied).toBe(false);
+    expect(board.gameBoard[3].occupied).toBe(false);
+    expect(board.gameBoard[4].occupied).toBe(false);
+  });
+
+  test("rotateShip() throws when an empty coordinate is passed into it", () => {
+    board.placeShip("Carrier", ["A", 1], "horizontal");
+    expect(() => {
+      board.rotateShip(["I", 1]);
+    }).toThrow();
+  });
+
+  test("rotateShip() throws when a valid rotation cannot be performed", () => {
+    board.placeShip("PatrolBoat", ["A", 1], "horizontal");
+    board.placeShip("Submarine", ["B", 1], "horizontal");
+    expect(() => {
+      board.rotateShip(["A", 1]);
+    }).toThrow();
+  });
 });
 
 describe("Player logic", () => {
@@ -298,6 +400,18 @@ describe("Game logic", () => {
 
     expect(game.playerOne.gameBoard.shipsPlaced().length).toBe(5);
     expect(game.playerTwo.gameBoard.shipsPlaced().length).toBe(5);
+
+    expect(game.playerOne.playerBoard()[0].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[1].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[2].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[3].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[4].occupied).toBe(true);
+
+    expect(game.playerTwo.playerBoard()[60].occupied).toBe(true);
+    expect(game.playerTwo.playerBoard()[61].occupied).toBe(true);
+    expect(game.playerTwo.playerBoard()[62].occupied).toBe(true);
+    expect(game.playerTwo.playerBoard()[63].occupied).toBe(true);
+    expect(game.playerTwo.playerBoard()[64].occupied).toBe(true);
   });
 
   test("setup() throws when an invalid playerName is passed", () => {
@@ -313,6 +427,13 @@ describe("Game logic", () => {
     }).toThrow();
   });
 
+  test("setup() throws when ships are overlapping with one another", () => {
+    game.setup("Frost", ["Carrier", ["A", 1], "vertical"]);
+    expect(() => {
+      game.setup("Frost", ["Battleship", ["A", 1], "vertical"]);
+    }).toThrow();
+  });
+
   test("setup() allows one ship to be placed at a time", () => {
     game.setup("Frost", ["Carrier", ["A", 1], "vertical"]);
     game.setup("Frost", ["Battleship", ["A", 2], "vertical"]);
@@ -320,6 +441,11 @@ describe("Game logic", () => {
     game.setup("Frost", ["Destroyer", ["A", 4], "vertical"]);
     game.setup("Frost", ["PatrolBoat", ["A", 5], "vertical"]);
     expect(game.playerOne.gameBoard.shipsPlaced().length).toBe(5);
+    expect(game.playerOne.playerBoard()[0].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[1].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[2].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[3].occupied).toBe(true);
+    expect(game.playerOne.playerBoard()[4].occupied).toBe(true);
   });
 
   test("setup() throws when more than one ship of the same type is placed", () => {

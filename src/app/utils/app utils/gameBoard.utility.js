@@ -20,7 +20,7 @@ class GameBoard {
     return this.gameBoard;
   }
 
-  placeShip(shipType, head, orientation) {
+  placeShip(shipType, head, orientation, rotateOverride = false) {
     let ship;
     try {
       ship = new shipTypes[shipType]();
@@ -41,8 +41,8 @@ class GameBoard {
     }
 
     const validTail = {
-      vertical: [validX[xIndex + ship.length - 1], headY],
-      horizontal: [headX, headY + ship.length - 1],
+      vertical: (xIndex + ship.length - 1) * 10 + headY,
+      horizontal: xIndex * 10 + headY - 1 + ship.length - 1,
     };
 
     let layout = String(orientation).toLowerCase();
@@ -53,32 +53,48 @@ class GameBoard {
 
     const end = validTail[layout];
 
-    const start = xIndex * 10 + headY - 1;
+    let start = xIndex * 10 + headY - 1;
 
-    if (this.#shipsOnBoard.includes(shipType)) {
-      throw new Error(
-        `You already have a ${shipType} on your board! Please try to place a different ship.`,
-      );
-    } else {
-      this.#shipsOnBoard.push(shipType);
-      this.ships.push(ship);
+    if (!rotateOverride) {
+      if (this.#shipsOnBoard.includes(shipType)) {
+        throw new Error(
+          `You already have a ${shipType} on your board! Please try to place a different ship.`,
+        );
+      } else {
+        this.#shipsOnBoard.push(shipType);
+        this.ships.push(ship);
+      }
     }
+
+    let validGrids = [];
 
     if (layout === "horizontal") {
-      for (let i = start; i < end[1]; i++) {
-        this.gameBoard[i].occupy();
-        this.gameBoard[i].ship = ship;
+      if (rotateOverride) {
+        start = start + 1;
+      }
+      for (let i = start; i <= end; i++) {
+        if (this.gameBoard[i].occupied) {
+          throw new Error("Two ships cannot occupy the same grid!");
+        }
+        validGrids.push(this.gameBoard[i]);
       }
     } else {
-      for (
-        let i = start;
-        i <= validX.indexOf(end[0]) * 10 + headY - 1;
-        i = i + 10
-      ) {
-        this.gameBoard[i].occupy();
-        this.gameBoard[i].ship = ship;
+      if (rotateOverride) {
+        start = start + 10;
+      }
+      for (let i = start; i <= end; i = i + 10) {
+        if (this.gameBoard[i].occupied) {
+          throw new Error("Ship cannot overlap!");
+        }
+        validGrids.push(this.gameBoard[i]);
       }
     }
+
+    validGrids.forEach((validGrid) => {
+      validGrid.occupy();
+      validGrid.ship = ship;
+      validGrid.headNodeIndex = start;
+    });
   }
 
   receiveAttack([x, y]) {
@@ -120,5 +136,74 @@ class GameBoard {
     }
     return false;
   }
+
+  rotateShip([x, y]) {
+    let xIndex = validX.indexOf(x);
+    const index = xIndex * 10 + y - 1;
+
+    let grid = this.gameBoard[index];
+    if (!grid.occupied) {
+      throw new Error("No ship there to rotate!");
+    }
+
+    const ship = grid.ship;
+    const headNode = this.gameBoard[grid.headNodeIndex];
+
+    const validTail = {
+      vertical: grid.headNodeIndex + (headNode.ship.length - 1) * 10,
+      horizontal: grid.headNodeIndex + headNode.ship.length - 1,
+    };
+
+    if (
+      this.gameBoard[validTail.vertical].occupied &&
+      this.gameBoard[validTail.vertical].ship.length === headNode.ship.length &&
+      !this.gameBoard[validTail.horizontal].occupied
+    ) {
+      try {
+        this.placeShip(
+          ship.constructor.name,
+          headNode.coordinates,
+          "horizontal",
+          true,
+        );
+      } catch (error) {
+        throw new Error(error, { cause: error });
+      }
+      for (
+        let i = grid.headNodeIndex + 10;
+        i <= validTail.vertical;
+        i = i + 10
+      ) {
+        this.gameBoard[i].clearGrid();
+        this.gameBoard[i].ship = null;
+        this.gameBoard[i].headNodeIndex = null;
+      }
+    } else if (
+      this.gameBoard[validTail.horizontal].occupied &&
+      this.gameBoard[validTail.horizontal].ship.length ===
+        headNode.ship.length &&
+      !this.gameBoard[validTail.vertical].occupied
+    ) {
+      try {
+        this.placeShip(
+          ship.constructor.name,
+          headNode.coordinates,
+          "vertical",
+          true,
+        );
+      } catch (error) {
+        throw new Error(error, { cause: error });
+      }
+
+      for (let i = grid.headNodeIndex + 1; i <= validTail.horizontal; i++) {
+        this.gameBoard[i].clearGrid();
+        this.gameBoard[i].ship = null;
+        this.gameBoard[i].headNodeIndex = null;
+      }
+    } else {
+      throw new Error("Cannot perform a viable rotation on this ship!");
+    }
+  }
 }
+
 export default GameBoard;

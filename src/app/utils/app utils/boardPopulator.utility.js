@@ -2,12 +2,22 @@ class BoardCoordinate {
   #taken;
   #hit;
   #shipType;
+  #headNodeIndex;
   constructor(x, y) {
     this.x = x;
     this.y = y;
     this.#taken = false;
     this.#hit = false;
     this.#shipType = null;
+    this.#headNodeIndex = null;
+  }
+
+  get headNodeIndex() {
+    return this.#headNodeIndex;
+  }
+
+  set headNodeIndex(x) {
+    this.#headNodeIndex = x;
   }
 
   get ship() {
@@ -42,7 +52,15 @@ class BoardCoordinate {
     if (!this.occupied) {
       this.#occupied = true;
     } else {
-      throw Error("The square is already occupied!");
+      throw new Error("The grid is already occupied!");
+    }
+  }
+
+  clearGrid() {
+    if (this.occupied) {
+      this.#occupied = false;
+    } else {
+      throw new Error("The grid is already not occupied!");
     }
   }
 

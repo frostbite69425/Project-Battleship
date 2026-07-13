@@ -5,6 +5,7 @@ import boardPopulator from "./boardPopulator.utility.js";
 import GameBoard from "./gameBoard.utility.js";
 import Player from "./player.utility.js";
 import Game from "../../controllers/app controller/gameController.controller.js";
+import randomiseSetup from "../../services/app services/randomiseSetup.service.js";
 
 let ship;
 let carrier;
@@ -233,7 +234,13 @@ describe("GameBoard logic", () => {
 
   test("Gameboard throws when invalid start coordinates are used", () => {
     expect(() => {
-      board.placeShip("aslkhc", ["Z", 101], "vertical");
+      board.placeShip("Carrier", ["Z", 101], "vertical");
+    }).toThrow();
+  });
+
+  test("Gameboard throws when overflowing start coordinates are used", () => {
+    expect(() => {
+      board.placeShip("Carrier", ["J", 10], "vertical");
     }).toThrow();
   });
 
@@ -456,6 +463,19 @@ describe("Game logic", () => {
     }).toThrow();
   });
 
+  test("setup() throws when an overflowing coordinate is used to place a ship", () => {
+    expect(() => {
+      game.setup(
+        "Frost",
+        ["Carrier", ["A", 1], "vertical"],
+        ["Battleship", ["A", 2], "vertical"],
+        ["Submarine", ["A", 3], "vertical"],
+        ["Destroyer", ["A", 4], "vertical"],
+        ["PatrolBoat", ["J", 10], "vertical"],
+      );
+    }).toThrow();
+  });
+
   test("playRound() allows one player to attack the other player's board", () => {
     game.setup(
       "Frost",
@@ -569,5 +589,17 @@ describe("Game logic", () => {
     expect(() => {
       newGame.playRound(["C", 1]);
     }).toThrow();
+  });
+});
+
+describe("Randomise logic", () => {
+  beforeEach(() => {
+    game = new Game(true);
+  });
+  test("randomiseSetup randomly places all 5 ships for the provided player", () => {
+    randomiseSetup(game, game.playerOne);
+    expect(game.playerOneSetup()).toBe(true);
+    randomiseSetup(game, game.playerTwo);
+    expect(game.playerTwoSetup()).toBe(true);
   });
 });

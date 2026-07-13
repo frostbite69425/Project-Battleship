@@ -34,7 +34,7 @@ class GameBoard {
 
     const xIndex = validX.indexOf(headX);
 
-    if (ship == undefined || xIndex === -1 || headY > 10 || headY < 1) {
+    if (xIndex === -1 || headY > 10 || headY < 1) {
       throw new Error(
         "You have invoked placeShip with invalid arguments! Please try agian with a valid ship and valid start coordinates and orientation!",
       );
@@ -51,6 +51,19 @@ class GameBoard {
       throw new Error("You need to select a valid orientation!");
     }
 
+    if (validTail.vertical > 100 && layout == "vertical") {
+      throw new Error(
+        `A ${shipType} cannot be placed here with the ${orientation} orientation!`,
+      );
+    } else if (
+      validTail.horizontal >= (xIndex + 1) * 10 &&
+      layout == "horizontal"
+    ) {
+      throw new Error(
+        `A ${shipType} cannot be placed here with the ${orientation} orientation!`,
+      );
+    }
+
     const end = validTail[layout];
 
     let start = xIndex * 10 + headY - 1;
@@ -60,9 +73,6 @@ class GameBoard {
         throw new Error(
           `You already have a ${shipType} on your board! Please try to place a different ship.`,
         );
-      } else {
-        this.#shipsOnBoard.push(shipType);
-        this.ships.push(ship);
       }
     }
 
@@ -89,6 +99,9 @@ class GameBoard {
         validGrids.push(this.gameBoard[i]);
       }
     }
+
+    this.#shipsOnBoard.push(shipType);
+    this.ships.push(ship);
 
     validGrids.forEach((validGrid) => {
       validGrid.occupy();

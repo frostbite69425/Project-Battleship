@@ -26,6 +26,14 @@ class Game {
     this.#playerTwoSetup = false;
   }
 
+  playerOneSetup() {
+    return this.#playerOneSetup;
+  }
+
+  playerTwoSetup() {
+    return this.#playerTwoSetup;
+  }
+
   get gameMode() {
     return this.singlePlayer;
   }

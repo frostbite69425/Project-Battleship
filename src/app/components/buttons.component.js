@@ -51,6 +51,14 @@ const multiplayerBtn = () => {
   return multiplayerBtn.domElement;
 };
 
+const clearBoardBtn = () => {
+  const clearBoardBtn = elementFactory("button", "clear-board-btn btn");
+  clearBoardBtn.domElement.type = "button";
+  clearBoardBtn.insertText("Clear Board");
+
+  return clearBoardBtn.domElement;
+};
+
 export {
   randomiseBtn,
   savePositionBtn,
@@ -58,4 +66,5 @@ export {
   playAgainBtn,
   singlePlayerBtn,
   multiplayerBtn,
+  clearBoardBtn,
 };

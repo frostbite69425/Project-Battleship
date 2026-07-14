@@ -20,11 +20,17 @@ const setupPage = (game, activePlayer = game.playerOne) => {
 
   const randomiseBtn = buttons.randomiseBtn();
   const savePositionBtn = buttons.savePositionBtn();
+  const clearBoardBtn = buttons.clearBoardBtn();
 
-  buttonDiv.domElement.append(randomiseBtn, savePositionBtn);
+  buttonDiv.domElement.append(randomiseBtn, clearBoardBtn, savePositionBtn);
 
   randomiseBtn.addEventListener("click", () => {
     randomiseSetup(game, activePlayer);
+    rerenderGrids(activePlayer.playerBoard());
+  });
+
+  clearBoardBtn.addEventListener("click", () => {
+    activePlayer.clearBoard();
     rerenderGrids(activePlayer.playerBoard());
   });
 

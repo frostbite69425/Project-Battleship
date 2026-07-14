@@ -14,6 +14,10 @@ class Player {
     }
   }
 
+  clearBoard() {
+    this.gameBoard = new GameBoard();
+  }
+
   receiveAttack([x, y]) {
     this.gameBoard.receiveAttack([x, y]);
   }

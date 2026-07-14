@@ -96,6 +96,10 @@ h6 {
     transition: all 0.2s ease-in-out;
   }
 
+  > .grid-div[data-occupied="true"] {
+    background-color: red;
+  }
+
   > .grid-div:hover {
     transform: scale(1.1);
     border: 2px solid white;

@@ -9,6 +9,8 @@ const randomiseSetup = (Game, player) => {
     "Submarine",
   ];
 
+  player.clearBoard();
+
   function getRandomIntInclusive(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
@@ -41,12 +43,6 @@ const randomiseSetup = (Game, player) => {
       console.log(e);
     }
     shipsPlaced = player.gameBoard.shipsPlaced().length;
-    console.log(
-      player.name,
-      Game.playerOneSetup(),
-      Game.playerTwoSetup(),
-      shipsPlaced,
-    );
   }
 };
 

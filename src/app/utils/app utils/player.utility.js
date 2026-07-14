@@ -12,6 +12,15 @@ class Player {
     } else {
       this.type = "human";
     }
+    this.setup = false;
+  }
+
+  finishSetup() {
+    this.setup = true;
+  }
+
+  resetSetup() {
+    this.setup = false;
   }
 
   clearBoard() {

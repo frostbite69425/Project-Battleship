@@ -598,8 +598,8 @@ describe("Randomise logic", () => {
   });
   test("randomiseSetup randomly places all 5 ships for the provided player", () => {
     randomiseSetup(game, game.playerOne);
-    expect(game.playerOneSetup()).toBe(true);
+    expect(game.playerOne.setup).toBe(true);
     randomiseSetup(game, game.playerTwo);
-    expect(game.playerTwoSetup()).toBe(true);
+    expect(game.playerTwo.setup).toBe(true);
   });
 });

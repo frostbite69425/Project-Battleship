@@ -31,12 +31,13 @@ const setupPage = (game, activePlayer = game.playerOne) => {
 
   clearBoardBtn.addEventListener("click", () => {
     activePlayer.clearBoard();
+    game.resetSetup(activePlayer);
     rerenderGrids(activePlayer.playerBoard());
   });
 
   savePositionBtn.addEventListener("click", () => {
-    const playerOneSetup = game.playerOneSetup();
-    const playerTwoSetup = game.playerTwoSetup();
+    const playerOneSetup = game.playerOne.setup;
+    const playerTwoSetup = game.playerTwo.setup;
     if (
       activePlayer == game.playerOne &&
       singlePlayer == true &&

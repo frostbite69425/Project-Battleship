@@ -150,6 +150,117 @@ class GameBoard {
     return false;
   }
 
+  clearShip(shipType, head) {
+    let [headX, headY] = head;
+    let xIndex = validX.indexOf(headX);
+    const index = xIndex * 10 + headY - 1;
+
+    let grid = this.gameBoard[index];
+    if (!grid.occupied) {
+      throw new Error("No ship there to clear!");
+    }
+
+    if (grid.ship.constructor.name !== shipType) {
+      throw new Error("Ship types do not match!");
+    }
+
+    const ship = grid.ship;
+    const headNode = this.gameBoard[grid.headNodeIndex];
+
+    const validTail = {
+      vertical: grid.headNodeIndex + (headNode.ship.length - 1) * 10,
+      horizontal: grid.headNodeIndex + headNode.ship.length - 1,
+    };
+
+    if (
+      this.gameBoard[validTail.vertical].occupied &&
+      this.gameBoard[validTail.vertical].ship.length === headNode.ship.length
+    ) {
+      for (let i = grid.headNodeIndex; i <= validTail.vertical; i = i + 10) {
+        this.gameBoard[i].clearGrid();
+        this.gameBoard[i].ship = null;
+        this.gameBoard[i].headNodeIndex = null;
+      }
+
+      let filteredShips = this.ships.filter(
+        (storedShip) => storedShip.length !== ship.length,
+      );
+      this.ships = filteredShips;
+
+      let filteredShipTypes = this.#shipsOnBoard.filter(
+        (stored) => stored !== ship.constructor.name,
+      );
+      this.#shipsOnBoard = filteredShipTypes;
+    } else if (
+      this.gameBoard[validTail.horizontal].occupied &&
+      this.gameBoard[validTail.horizontal].ship.length === headNode.ship.length
+    ) {
+      for (let i = grid.headNodeIndex; i <= validTail.horizontal; i++) {
+        this.gameBoard[i].clearGrid();
+        this.gameBoard[i].ship = null;
+        this.gameBoard[i].headNodeIndex = null;
+      }
+
+      let filteredShips = this.ships.filter(
+        (storedShip) => storedShip.length !== ship.length,
+      );
+      this.ships = filteredShips;
+
+      let filteredShipTypes = this.#shipsOnBoard.filter(
+        (stored) => stored !== ship.constructor.name,
+      );
+      this.#shipsOnBoard = filteredShipTypes;
+    } else {
+      throw new Error("Cannot clear the specified ship from this grid!");
+    }
+  }
+
+  relocateShip(shipType, start, end) {
+    let [headX, headY] = start;
+    let xIndex = validX.indexOf(headX);
+    const index = xIndex * 10 + headY - 1;
+
+    let grid = this.gameBoard[index];
+    if (!grid.occupied) {
+      throw new Error("No ship there to relocate!");
+    }
+
+    if (grid.ship.constructor.name !== shipType) {
+      throw new Error("Ship types do not match!");
+    }
+
+    const headNode = this.gameBoard[grid.headNodeIndex];
+
+    const validTail = {
+      vertical: grid.headNodeIndex + (headNode.ship.length - 1) * 10,
+      horizontal: grid.headNodeIndex + headNode.ship.length - 1,
+    };
+
+    if (
+      this.gameBoard[validTail.vertical].occupied &&
+      this.gameBoard[validTail.vertical].ship.length === headNode.ship.length
+    ) {
+      try {
+        this.clearShip(shipType, start);
+        this.placeShip(shipType, end, "vertical");
+      } catch (error) {
+        return error;
+      }
+    } else if (
+      this.gameBoard[validTail.horizontal].occupied &&
+      this.gameBoard[validTail.horizontal].ship.length === headNode.ship.length
+    ) {
+      try {
+        this.clearShip(shipType, start);
+        this.placeShip(shipType, end, "vertical");
+      } catch (error) {
+        return error;
+      }
+    } else {
+      throw new Error("Cannot relocate the ship on this grid!");
+    }
+  }
+
   rotateShip([x, y]) {
     let xIndex = validX.indexOf(x);
     const index = xIndex * 10 + y - 1;

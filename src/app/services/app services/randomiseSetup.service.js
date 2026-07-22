@@ -40,7 +40,7 @@ const randomiseSetup = (Game, player) => {
       Game.setup(player.name, [randomShip, randomPos, randomOrientation]);
       initiatedShips.push(randomShip);
     } catch (e) {
-      console.log(e);
+      // console.log(e); COMMENTING THIS OUT SINCE THE ERRORS AREN'T RELEVANT
     }
     shipsPlaced = player.gameBoard.shipsPlaced().length;
   }

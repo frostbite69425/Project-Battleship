@@ -364,6 +364,72 @@ describe("GameBoard logic", () => {
       board.rotateShip(["A", 1]);
     }).toThrow();
   });
+
+  test("clearShip() removes a placed ship from the board", () => {
+    board.placeShip("PatrolBoat", ["A", 1], "horizontal");
+    board.clearShip("PatrolBoat", ["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(false);
+  });
+
+  test("clearShip() removes the ship from the gameboards internal states", () => {
+    board.placeShip("PatrolBoat", ["A", 5], "vertical");
+    board.placeShip("Carrier", ["A", 1], "vertical");
+    board.placeShip("Battleship", ["A", 2], "vertical");
+    board.placeShip("Submarine", ["A", 3], "vertical");
+    board.placeShip("Destroyer", ["A", 4], "vertical");
+
+    expect(board.shipsPlaced().length).toBe(5);
+    expect(board.ships.length).toBe(5);
+    board.clearShip("PatrolBoat", ["A", 5]);
+    expect(board.gameBoard[5].occupied).toBe(false);
+    expect(board.shipsPlaced().length).toBe(4);
+    expect(board.ships.length).toBe(4);
+  });
+
+  test("clearShip() throws when it is invoked on an unoccupied grid", () => {
+    board.placeShip("PatrolBoat", ["A", 5], "vertical");
+    expect(() => {
+      board.clearShip("Carrier", ["A", 5]);
+    }).toThrow();
+
+    expect(() => {
+      board.clearShip("Carrier", ["I", 5]);
+    }).toThrow();
+  });
+
+  test("relocateShip() moves the ship from its original position to the new position", () => {
+    board.placeShip("PatrolBoat", ["A", 5], "vertical");
+    expect(board.gameBoard[4].occupied).toBe(true);
+    board.relocateShip("PatrolBoat", ["A", 5], ["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[4].occupied).toBe(false);
+  });
+
+  test("relocateShip() throws when it is called on an unplaced ship", () => {
+    board.placeShip("PatrolBoat", ["A", 5], "vertical");
+    expect(board.gameBoard[4].occupied).toBe(true);
+    expect(() => {
+      board.relocateShip("PatrolBoat", ["I", 5], ["A", 1]);
+    }).toThrow();
+  });
+
+  test("relocateShip() throws when the shipType of the argument and the occupied grid do not match", () => {
+    board.placeShip("PatrolBoat", ["A", 5], "vertical");
+    expect(board.gameBoard[4].occupied).toBe(true);
+    expect(() => {
+      board.relocateShip("Carrier", ["A", 5], ["A", 1]);
+    }).toThrow();
+  });
+
+  test("relocateShip() clears the original position of the ship and restores state", () => {
+    board.placeShip("PatrolBoat", ["A", 5], "vertical");
+    expect(board.gameBoard[4].occupied).toBe(true);
+    board.relocateShip("PatrolBoat", ["A", 5], ["A", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[4].occupied).toBe(false);
+    expect(board.ships.length).toBe(1);
+    expect(board.shipsPlaced().length).toBe(1);
+  });
 });
 
 describe("Player logic", () => {

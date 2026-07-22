@@ -14,6 +14,11 @@ const board = (player) => {
     gridDiv.domElement.dataset.shot = grid.shot;
     if (grid.ship !== null) {
       gridDiv.domElement.dataset.shipType = grid.ship;
+      if (grid.readHeadNode()) {
+        gridDiv.domElement.dataset.headNode = grid.readHeadNode();
+      } else if (grid.readEndNode()) {
+        gridDiv.domElement.dataset.endNode = grid.readEndNode();
+      }
     }
     gridHolder.domElement.appendChild(gridDiv.domElement);
   }

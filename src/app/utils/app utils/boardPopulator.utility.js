@@ -3,6 +3,8 @@ class BoardCoordinate {
   #hit;
   #shipType;
   #headNodeIndex;
+  #headNode;
+  #endNode;
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -10,6 +12,24 @@ class BoardCoordinate {
     this.#hit = false;
     this.#shipType = null;
     this.#headNodeIndex = null;
+    this.#headNode = false;
+    this.#endNode = false;
+  }
+
+  readHeadNode() {
+    return this.#headNode;
+  }
+
+  readEndNode() {
+    return this.#endNode;
+  }
+
+  toggleHeadNode() {
+    this.#headNode = !this.#headNode;
+  }
+
+  toggleEndNode() {
+    this.#endNode = !this.#endNode;
   }
 
   get headNodeIndex() {

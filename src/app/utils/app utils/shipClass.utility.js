@@ -1,19 +1,10 @@
 class Ship {
-  #length;
   #hasSunk;
   #hits;
   constructor() {
-    this.#length = undefined;
+    this.length = undefined;
     this.#hasSunk = false;
     this.#hits = 0;
-  }
-
-  get length() {
-    return this.#length;
-  }
-
-  set length(x) {
-    this.#length = x;
   }
 
   get hits() {

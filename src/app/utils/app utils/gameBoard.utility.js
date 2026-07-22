@@ -108,6 +108,9 @@ class GameBoard {
       validGrid.ship = ship;
       validGrid.headNodeIndex = start;
     });
+
+    validGrids[0].toggleHeadNode();
+    validGrids[validGrids.length - 1].toggleEndNode();
   }
 
   receiveAttack([x, y]) {
@@ -191,6 +194,8 @@ class GameBoard {
         (stored) => stored !== ship.constructor.name,
       );
       this.#shipsOnBoard = filteredShipTypes;
+      headNode.toggleHeadNode();
+      this.gameBoard[validTail.vertical].toggleEndNode();
     } else if (
       this.gameBoard[validTail.horizontal].occupied &&
       this.gameBoard[validTail.horizontal].ship.length === headNode.ship.length
@@ -210,6 +215,8 @@ class GameBoard {
         (stored) => stored !== ship.constructor.name,
       );
       this.#shipsOnBoard = filteredShipTypes;
+      headNode.toggleHeadNode();
+      this.gameBoard[validTail.horizontal].toggleEndNode();
     } else {
       throw new Error("Cannot clear the specified ship from this grid!");
     }

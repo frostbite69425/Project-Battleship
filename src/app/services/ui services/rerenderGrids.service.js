@@ -16,20 +16,16 @@ const rerenderGrids = (board) => {
     gridDiv.domElement.dataset.shot = grid.shot;
     if (grid.ship !== null) {
       gridDiv.domElement.dataset.shipType = grid.ship.constructor.name;
+      let shipGridImg = elementFactory("img", "ship-grid-img");
+      gridDiv.domElement.appendChild(shipGridImg.domElement);
       if (grid.readHeadNode()) {
         gridDiv.domElement.dataset.headNode = grid.readHeadNode();
-        let shipHeadImg = elementFactory("img", "ship-head");
-        shipHeadImg.domElement.src = shipHead;
-        gridDiv.domElement.appendChild(shipHeadImg.domElement);
+        shipGridImg.domElement.src = shipHead;
       } else if (grid.readEndNode()) {
         gridDiv.domElement.dataset.endNode = grid.readEndNode();
-        let shipEndImg = elementFactory("img", "ship-end");
-        shipEndImg.domElement.src = shipEnd;
-        gridDiv.domElement.appendChild(shipEndImg.domElement);
+        shipGridImg.domElement.src = shipEnd;
       } else {
-        let shipMidImg = elementFactory("img", "ship-mid");
-        shipMidImg.domElement.src = shipMid;
-        gridDiv.domElement.appendChild(shipMidImg.domElement);
+        shipGridImg.domElement.src = shipMid;
       }
     }
     gridHolder.appendChild(gridDiv.domElement);

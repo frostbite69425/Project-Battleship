@@ -116,3 +116,8 @@ h6 {
   gap: 1rem;
   align-items: center;
 }
+
+.ship-grid-img {
+  height: 50px;
+  width: 50px;
+}

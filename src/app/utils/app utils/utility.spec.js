@@ -106,14 +106,17 @@ describe("Board populator logic", () => {
     expect(populatedBoard[49]).toEqual({
       x: "E",
       y: 10,
+      orientation: null,
     });
     expect(populatedBoard[79]).toEqual({
       x: "H",
       y: 10,
+      orientation: null,
     });
     expect(populatedBoard[63]).toEqual({
       x: "G",
       y: 4,
+      orientation: null,
     });
   });
 
@@ -178,6 +181,7 @@ describe("GameBoard logic", () => {
     expect(board.gameBoard[0]).toEqual({
       x: "A",
       y: 1,
+      orientation: null,
     });
   });
 

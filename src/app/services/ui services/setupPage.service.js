@@ -5,6 +5,7 @@ import * as buttons from "../../components/buttons.component.js";
 import randomiseSetup from "../app services/randomiseSetup.service.js";
 import battlePage from "./battlePage.service.js";
 import rerenderGrids from "./rerenderGrids.service.js";
+import dragAndDrop from "./dragAndDrop.service.js";
 
 const setupPage = (game, activePlayer = game.playerOne) => {
   const content = document.querySelector(".content");
@@ -58,6 +59,8 @@ const setupPage = (game, activePlayer = game.playerOne) => {
   });
 
   content.append(shipContainer, boardContainer, buttonDiv.domElement);
+
+  dragAndDrop(game, activePlayer);
 };
 
 export default setupPage;

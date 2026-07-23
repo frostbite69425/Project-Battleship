@@ -1,4 +1,4 @@
-const randomiseSetup = (Game, player) => {
+const randomiseSetup = (game, player) => {
   const validX = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
   const validOrientation = ["vertical", "horizontal"];
   const validShips = [
@@ -37,7 +37,7 @@ const randomiseSetup = (Game, player) => {
 
       let randomOrientation = validOrientation[getRandomIntInclusive(0, 1)];
 
-      Game.setup(player.name, [randomShip, randomPos, randomOrientation]);
+      game.setup(player.name, [randomShip, randomPos, randomOrientation]);
       initiatedShips.push(randomShip);
     } catch (e) {
       // console.log(e); COMMENTING THIS OUT SINCE THE ERRORS AREN'T RELEVANT

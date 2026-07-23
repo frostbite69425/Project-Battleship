@@ -14,6 +14,7 @@ class BoardCoordinate {
     this.#headNodeIndex = null;
     this.#headNode = false;
     this.#endNode = false;
+    this.orientation = null;
   }
 
   readHeadNode() {

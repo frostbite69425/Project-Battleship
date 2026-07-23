@@ -26,6 +26,7 @@ const shipHolder = () => {
     shipNamePara.insertText(`${ship}`);
     let shipIcon = elementFactory("img", "ship-icon");
     shipIcon.domElement.src = shipIcons[ship];
+    shipIcon.domElement.draggable = true;
     shipIcon.domElement.dataset.shipType = ship;
     shipHolder.domElement.append(shipNamePara.domElement, shipIcon.domElement);
     shipHolderDiv.domElement.appendChild(shipHolder.domElement);

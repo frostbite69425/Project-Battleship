@@ -107,6 +107,7 @@ class GameBoard {
       validGrid.occupy();
       validGrid.ship = ship;
       validGrid.headNodeIndex = start;
+      validGrid.orientation = layout;
     });
 
     validGrids[0].toggleHeadNode();
@@ -183,6 +184,7 @@ class GameBoard {
         this.gameBoard[i].clearGrid();
         this.gameBoard[i].ship = null;
         this.gameBoard[i].headNodeIndex = null;
+        this.gameBoard[i].orientation = null;
       }
 
       let filteredShips = this.ships.filter(
@@ -204,6 +206,7 @@ class GameBoard {
         this.gameBoard[i].clearGrid();
         this.gameBoard[i].ship = null;
         this.gameBoard[i].headNodeIndex = null;
+        this.gameBoard[i].orientation = null;
       }
 
       let filteredShips = this.ships.filter(
@@ -308,7 +311,9 @@ class GameBoard {
         this.gameBoard[i].clearGrid();
         this.gameBoard[i].ship = null;
         this.gameBoard[i].headNodeIndex = null;
+        this.gameBoard[i].orientation = null;
       }
+      headNode.orientation = "horizontal";
     } else if (
       this.gameBoard[validTail.horizontal].occupied &&
       this.gameBoard[validTail.horizontal].ship.length ===
@@ -330,7 +335,9 @@ class GameBoard {
         this.gameBoard[i].clearGrid();
         this.gameBoard[i].ship = null;
         this.gameBoard[i].headNodeIndex = null;
+        this.gameBoard[i].orientation = null;
       }
+      headNode.orientation = "vertical";
     } else {
       throw new Error("Cannot perform a viable rotation on this ship!");
     }

@@ -423,7 +423,7 @@ describe("GameBoard logic", () => {
   test("relocateShip() moves the ship from its original position to the new position", () => {
     board.placeShip("PatrolBoat", ["A", 5], "vertical");
     expect(board.gameBoard[4].occupied).toBe(true);
-    board.relocateShip("PatrolBoat", ["A", 5], ["A", 1]);
+    board.relocateShip("PatrolBoat", ["A", 5], ["A", 1], "vertical");
     expect(board.gameBoard[0].occupied).toBe(true);
     expect(board.gameBoard[4].occupied).toBe(false);
   });
@@ -432,7 +432,15 @@ describe("GameBoard logic", () => {
     board.placeShip("PatrolBoat", ["A", 5], "vertical");
     expect(board.gameBoard[4].occupied).toBe(true);
     expect(() => {
-      board.relocateShip("PatrolBoat", ["I", 5], ["A", 1]);
+      board.relocateShip("PatrolBoat", ["I", 5], ["A", 1], "vertical");
+    }).toThrow();
+  });
+
+  test("relocateShip() throws when it is to relocate a ship that would occupy invalid grids", () => {
+    board.placeShip("PatrolBoat", ["A", 10], "vertical");
+    expect(board.gameBoard[9].occupied).toBe(true);
+    expect(() => {
+      board.relocateShip("PatrolBoat", ["A", 10], ["J", 10], "vertical");
     }).toThrow();
   });
 
@@ -440,14 +448,14 @@ describe("GameBoard logic", () => {
     board.placeShip("PatrolBoat", ["A", 5], "vertical");
     expect(board.gameBoard[4].occupied).toBe(true);
     expect(() => {
-      board.relocateShip("Carrier", ["A", 5], ["A", 1]);
+      board.relocateShip("Carrier", ["A", 5], ["A", 1], "vertical");
     }).toThrow();
   });
 
   test("relocateShip() clears the original position of the ship and restores state", () => {
     board.placeShip("PatrolBoat", ["A", 5], "vertical");
     expect(board.gameBoard[4].occupied).toBe(true);
-    board.relocateShip("PatrolBoat", ["A", 5], ["A", 1]);
+    board.relocateShip("PatrolBoat", ["A", 5], ["A", 1], "vertical");
     expect(board.gameBoard[0].occupied).toBe(true);
     expect(board.gameBoard[4].occupied).toBe(false);
     expect(board.ships.length).toBe(1);

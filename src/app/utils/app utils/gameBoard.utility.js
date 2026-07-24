@@ -227,10 +227,39 @@ class GameBoard {
     }
   }
 
-  relocateShip(shipType, start, end) {
+  relocateShip(shipType, start, end, orientation) {
+    let ship = new shipTypes[shipType]();
     let [headX, headY] = start;
     let xIndex = validX.indexOf(headX);
     const index = xIndex * 10 + headY - 1;
+
+    let [endX, endY] = end;
+    endY = Number(endY);
+    const endXIndex = validX.indexOf(endX);
+
+    const validEndTail = {
+      vertical: (endXIndex + ship.length - 1) * 10 + endY,
+      horizontal: endXIndex * 10 + endY - 1 + ship.length - 1,
+    };
+
+    let layout = orientation.toString();
+
+    if (validEndTail.vertical > 100 && layout == "vertical") {
+      throw new Error(
+        `A ${shipType} cannot be placed here with the ${orientation} orientation!`,
+      );
+    } else if (
+      validEndTail.horizontal >= (endXIndex + 1) * 10 &&
+      layout == "horizontal"
+    ) {
+      throw new Error(
+        `A ${shipType} cannot be placed here with the ${orientation} orientation!`,
+      );
+    }
+
+    if (xIndex === -1 || headY > 10 || headY < 1) {
+      throw new Error("You cannot relocate your ship to that position!");
+    }
 
     let grid = this.gameBoard[index];
     if (!grid.occupied) {
@@ -249,25 +278,12 @@ class GameBoard {
     };
 
     if (
-      this.gameBoard[validTail.vertical].occupied &&
-      this.gameBoard[validTail.vertical].ship.length === headNode.ship.length
+      this.gameBoard[validTail[layout]].occupied &&
+      this.gameBoard[validTail[layout]].ship.length === headNode.ship.length
     ) {
-      try {
-        this.clearShip(shipType, start);
-        this.placeShip(shipType, end, "vertical");
-      } catch (error) {
-        return error;
-      }
-    } else if (
-      this.gameBoard[validTail.horizontal].occupied &&
-      this.gameBoard[validTail.horizontal].ship.length === headNode.ship.length
-    ) {
-      try {
-        this.clearShip(shipType, start);
-        this.placeShip(shipType, end, "vertical");
-      } catch (error) {
-        return error;
-      }
+      this.clearShip(shipType, start);
+      let direction = layout == "horizontal" ? "horizontal" : "vertical";
+      this.placeShip(shipType, end, direction);
     } else {
       throw new Error("Cannot relocate the ship on this grid!");
     }

@@ -63,6 +63,17 @@ const setupPage = (game, activePlayer = game.playerOne) => {
 
   dragAndDrop(game, activePlayer);
   rotateShip(game, activePlayer);
+  // let placedShipIcons;
+
+  // const gridList = document.querySelectorAll(".grid-div");
+  // gridList.forEach((grid) => {
+  //   grid.addEventListener("dragstart", (e) => {
+  //     // e.preventDefault();
+  //     placedShipIcons = document.querySelectorAll(".grid-div > .ship-grid-img");
+
+  //     relocateShip(game, activePlayer, placedShipIcons);
+  //   });
+  // });
 };
 
 export default setupPage;

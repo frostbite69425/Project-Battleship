@@ -16,6 +16,7 @@ const rerenderGrids = (board) => {
     if (grid.ship !== null) {
       gridDiv.dataset.shipType = grid.ship.constructor.name;
       let shipGridImg = elementFactory("img", "ship-grid-img");
+      shipGridImg.domElement.dataset.shipType = grid.ship.constructor.name;
       gridDiv.appendChild(shipGridImg.domElement);
       if (grid.orientation === "vertical") {
         shipGridImg.domElement.classList.add("vertical-grid");

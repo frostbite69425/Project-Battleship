@@ -1,11 +1,15 @@
 import rerenderGrids from "./rerenderGrids.service.js";
+import dragStartHandler from "../../utils/ui utils/dragStartHandler.utility.js";
+
+const validShips = [
+  "Battleship",
+  "Carrier",
+  "Destroyer",
+  "PatrolBoat",
+  "Submarine",
+];
 
 const dragAndDrop = (game, player) => {
-  function dragStartHandler(ev) {
-    ev.dataTransfer.clearData();
-    ev.dataTransfer.setData("text/plain", ev.target.dataset.shipType);
-  }
-
   const shipDragIcons = document.querySelectorAll(".ship-holder > img");
 
   shipDragIcons.forEach((icon) => {
@@ -19,19 +23,38 @@ const dragAndDrop = (game, player) => {
       e.preventDefault();
     });
 
+    grid.addEventListener("dragstart", dragStartHandler);
+
     grid.addEventListener("drop", (e) => {
       e.preventDefault();
 
       const shipType = e.dataTransfer.getData("text");
+      const dataString = e.dataTransfer.getData("custom-coords");
+      const coords = JSON.parse(dataString);
 
-      const xCoord = grid.dataset.xValue;
-      const yCoord = Number(grid.dataset.yValue);
-      try {
+      if (validShips.includes(shipType) && coords.xValue === undefined) {
+        const xCoord = grid.dataset.xValue;
+        const yCoord = Number(grid.dataset.yValue);
+
         game.setup(player.name, [shipType, [xCoord, yCoord], "horizontal"]);
-      } catch (error) {
-        console.error(error);
+
+        rerenderGrids(player.playerBoard());
+      } else if (validShips.includes(shipType) && coords.xValue !== undefined) {
+        const xCoord = grid.dataset.xValue;
+        const yCoord = Number(grid.dataset.yValue);
+
+        const startX = coords.xValue;
+        const startY = Number(coords.yValue);
+
+        player.gameBoard.relocateShip(
+          shipType,
+          [startX, startY],
+          [xCoord, yCoord],
+          coords.orientation,
+        );
+
+        rerenderGrids(player.playerBoard());
       }
-      rerenderGrids(player.playerBoard());
     });
   });
 };

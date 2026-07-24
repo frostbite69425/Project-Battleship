@@ -77,7 +77,7 @@ class GameBoard {
     }
 
     let validGrids = [];
-
+    let headNodeIndexPointer = start;
     if (layout === "horizontal") {
       if (rotateOverride) {
         start = start + 1;
@@ -106,11 +106,13 @@ class GameBoard {
     validGrids.forEach((validGrid) => {
       validGrid.occupy();
       validGrid.ship = ship;
-      validGrid.headNodeIndex = start;
+      validGrid.headNodeIndex = headNodeIndexPointer;
       validGrid.orientation = layout;
     });
 
-    validGrids[0].toggleHeadNode();
+    if (!rotateOverride) {
+      validGrids[0].toggleHeadNode();
+    }
     validGrids[validGrids.length - 1].toggleEndNode();
   }
 
@@ -312,6 +314,11 @@ class GameBoard {
         this.gameBoard[i].ship = null;
         this.gameBoard[i].headNodeIndex = null;
         this.gameBoard[i].orientation = null;
+        if (this.gameBoard[i].readHeadNode()) {
+          this.gameBoard[i].toggleHeadNode();
+        } else if (this.gameBoard[i].readEndNode()) {
+          this.gameBoard[i].toggleEndNode();
+        }
       }
       headNode.orientation = "horizontal";
     } else if (
@@ -336,6 +343,11 @@ class GameBoard {
         this.gameBoard[i].ship = null;
         this.gameBoard[i].headNodeIndex = null;
         this.gameBoard[i].orientation = null;
+        if (this.gameBoard[i].readHeadNode()) {
+          this.gameBoard[i].toggleHeadNode();
+        } else if (this.gameBoard[i].readEndNode()) {
+          this.gameBoard[i].toggleEndNode();
+        }
       }
       headNode.orientation = "vertical";
     } else {

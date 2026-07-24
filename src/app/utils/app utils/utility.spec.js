@@ -369,6 +369,25 @@ describe("GameBoard logic", () => {
     }).toThrow();
   });
 
+  test("rotateShip() clears the headNode and endNode properties from grids occupied in the previous orientation", () => {
+    board.placeShip("Submarine", ["A", 1], "vertical");
+    board.rotateShip(["C", 1]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[0].readHeadNode()).toBe(true);
+    expect(board.gameBoard[10].readHeadNode()).toBe(false);
+    expect(board.gameBoard[20].readEndNode()).toBe(false);
+    expect(board.gameBoard[1].readHeadNode()).toBe(false);
+    expect(board.gameBoard[2].readEndNode()).toBe(true);
+
+    board.rotateShip(["A", 3]);
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[0].readHeadNode()).toBe(true);
+    expect(board.gameBoard[10].readHeadNode()).toBe(false);
+    expect(board.gameBoard[20].readEndNode()).toBe(true);
+    expect(board.gameBoard[1].readHeadNode()).toBe(false);
+    expect(board.gameBoard[2].readEndNode()).toBe(false);
+  });
+
   test("clearShip() removes a placed ship from the board", () => {
     board.placeShip("PatrolBoat", ["A", 1], "horizontal");
     board.clearShip("PatrolBoat", ["A", 1]);

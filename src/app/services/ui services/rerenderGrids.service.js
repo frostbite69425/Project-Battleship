@@ -29,6 +29,10 @@ const rerenderGrids = (board) => {
       } else {
         shipGridImg.domElement.src = shipMid;
       }
+    } else {
+      gridDiv.removeAttribute("data-ship-type");
+      gridDiv.removeAttribute("data-head-node");
+      gridDiv.removeAttribute("data-end-node");
     }
   }
 };

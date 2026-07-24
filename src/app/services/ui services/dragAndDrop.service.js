@@ -30,7 +30,6 @@ const dragAndDrop = (game, player) => {
         game.setup(player.name, [shipType, [xCoord, yCoord], "horizontal"]);
       } catch (error) {
         console.error(error);
-        console.log(player.gameBoard.ships, player.gameBoard.shipsPlaced());
       }
       rerenderGrids(player.playerBoard());
     });

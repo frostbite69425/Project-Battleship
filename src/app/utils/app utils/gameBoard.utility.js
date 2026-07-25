@@ -231,23 +231,43 @@ class GameBoard {
     let ship = new shipTypes[shipType]();
     let [headX, headY] = start;
     let xIndex = validX.indexOf(headX);
-    const index = xIndex * 10 + headY - 1;
+    const indexPointer = xIndex * 10 + headY - 1;
+    const index = this.gameBoard[indexPointer].headNodeIndex;
 
     let [endX, endY] = end;
     endY = Number(endY);
     const endXIndex = validX.indexOf(endX);
+    const endIndex = endXIndex * 10 + endY - 1;
+
+    if (this.gameBoard[endIndex].occupied) {
+      throw new Error(
+        "You cannot relocate this ship to an already occupied grid!",
+      );
+    }
 
     const validEndTail = {
-      vertical: (endXIndex + ship.length - 1) * 10 + endY - 1,
-      horizontal: endXIndex * 10 + endY - 1 + ship.length - 1,
+      vertical: endIndex + 10 * (ship.length - 1),
+      horizontal: endIndex + ship.length - 1,
     };
 
     let layout = orientation.toString();
 
-    if (this.gameBoard[validEndTail[layout]].occupied) {
-      throw new Error(
-        "You cannot relocate this ship to an already occupied grid!",
-      );
+    if (layout == "horizontal") {
+      for (let i = endIndex; i <= validEndTail[layout]; i++) {
+        if (this.gameBoard[i].occupied) {
+          throw new Error(
+            "You cannot relocate this ship to an already occupied grid!",
+          );
+        }
+      }
+    } else if (layout == "vertical") {
+      for (let i = endIndex; i <= validEndTail[layout]; i = i + 10) {
+        if (this.gameBoard[i].occupied) {
+          throw new Error(
+            "You cannot relocate this ship to an already occupied grid!",
+          );
+        }
+      }
     }
 
     if (validEndTail.vertical > 100 && layout == "vertical") {

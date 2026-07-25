@@ -1,5 +1,6 @@
 import rerenderGrids from "./rerenderGrids.service.js";
 import dragStartHandler from "../../utils/ui utils/dragStartHandler.utility.js";
+import notification from "./notification.service.js";
 
 const validShips = [
   "Battleship",
@@ -36,24 +37,31 @@ const dragAndDrop = (game, player) => {
         const xCoord = grid.dataset.xValue;
         const yCoord = Number(grid.dataset.yValue);
 
-        game.setup(player.name, [shipType, [xCoord, yCoord], "horizontal"]);
+        try {
+          game.setup(player.name, [shipType, [xCoord, yCoord], "horizontal"]);
 
-        rerenderGrids(player.playerBoard());
+          rerenderGrids(player.playerBoard());
+        } catch (error) {
+          notification(error, "danger");
+        }
       } else if (validShips.includes(shipType) && coords.xValue !== undefined) {
         const xCoord = grid.dataset.xValue;
         const yCoord = Number(grid.dataset.yValue);
 
         const startX = coords.xValue;
         const startY = Number(coords.yValue);
+        try {
+          player.gameBoard.relocateShip(
+            shipType,
+            [startX, startY],
+            [xCoord, yCoord],
+            coords.orientation,
+          );
 
-        player.gameBoard.relocateShip(
-          shipType,
-          [startX, startY],
-          [xCoord, yCoord],
-          coords.orientation,
-        );
-
-        rerenderGrids(player.playerBoard());
+          rerenderGrids(player.playerBoard());
+        } catch (error) {
+          notification(error, "danger");
+        }
       }
     });
   });

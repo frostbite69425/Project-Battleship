@@ -129,3 +129,48 @@ h6 {
 .vertical-grid {
   transform: rotate(90deg);
 }
+
+.warning {
+  background-color: orangered;
+}
+
+.danger {
+  background-color: red;
+}
+
+.info {
+  background-color: rgb(82, 82, 249);
+}
+
+.alert-div {
+  padding: 1rem;
+  border-radius: 15px;
+  /* color: var(--text); */
+  color: black;
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+  max-width: fit-content;
+  left: 50%;
+  transform: translate(-50%, 0);
+  gap: 2rem;
+  position: fixed;
+  top: 4rem;
+  z-index: 2000;
+
+  > .alert-text {
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  > button {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    outline: none;
+    border: none;
+    display: grid;
+    place-items: center;
+    background-color: black;
+  }
+}

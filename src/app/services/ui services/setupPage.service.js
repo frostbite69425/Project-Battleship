@@ -7,6 +7,7 @@ import battlePage from "./battlePage.service.js";
 import rerenderGrids from "./rerenderGrids.service.js";
 import dragAndDrop from "./dragAndDrop.service.js";
 import rotateShip from "./rotateShip.service.js";
+import notification from "./notification.service.js";
 
 const setupPage = (game, activePlayer = game.playerOne) => {
   const content = document.querySelector(".content");
@@ -55,7 +56,7 @@ const setupPage = (game, activePlayer = game.playerOne) => {
     } else if (playerTwoSetup) {
       battlePage(game);
     } else {
-      console.error("You need to setup your ships first!");
+      notification("You need to setup your ships first!");
     }
   });
 
@@ -63,17 +64,6 @@ const setupPage = (game, activePlayer = game.playerOne) => {
 
   dragAndDrop(game, activePlayer);
   rotateShip(game, activePlayer);
-  // let placedShipIcons;
-
-  // const gridList = document.querySelectorAll(".grid-div");
-  // gridList.forEach((grid) => {
-  //   grid.addEventListener("dragstart", (e) => {
-  //     // e.preventDefault();
-  //     placedShipIcons = document.querySelectorAll(".grid-div > .ship-grid-img");
-
-  //     relocateShip(game, activePlayer, placedShipIcons);
-  //   });
-  // });
 };
 
 export default setupPage;

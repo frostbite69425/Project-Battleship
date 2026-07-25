@@ -41,7 +41,7 @@ class GameBoard {
     }
 
     const validTail = {
-      vertical: (xIndex + ship.length - 1) * 10 + headY,
+      vertical: (xIndex + ship.length - 1) * 10 + headY - 1,
       horizontal: xIndex * 10 + headY - 1 + ship.length - 1,
     };
 
@@ -238,11 +238,17 @@ class GameBoard {
     const endXIndex = validX.indexOf(endX);
 
     const validEndTail = {
-      vertical: (endXIndex + ship.length - 1) * 10 + endY,
+      vertical: (endXIndex + ship.length - 1) * 10 + endY - 1,
       horizontal: endXIndex * 10 + endY - 1 + ship.length - 1,
     };
 
     let layout = orientation.toString();
+
+    if (this.gameBoard[validEndTail[layout]].occupied) {
+      throw new Error(
+        "You cannot relocate this ship to an already occupied grid!",
+      );
+    }
 
     if (validEndTail.vertical > 100 && layout == "vertical") {
       throw new Error(

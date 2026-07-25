@@ -444,6 +444,20 @@ describe("GameBoard logic", () => {
     }).toThrow();
   });
 
+  test("relocateShip() does not remove a ship from its initial position if the final position is occupied", () => {
+    board.placeShip("PatrolBoat", ["A", 1], "vertical");
+    board.placeShip("Submarine", ["A", 2], "vertical");
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[1].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(true);
+    expect(board.gameBoard[11].occupied).toBe(true);
+    expect(() => {
+      board.relocateShip("PatrolBoat", ["A", 1], ["A", 2], "vertical");
+    }).toThrow();
+    expect(board.gameBoard[0].occupied).toBe(true);
+    expect(board.gameBoard[10].occupied).toBe(true);
+  });
+
   test("relocateShip() throws when the shipType of the argument and the occupied grid do not match", () => {
     board.placeShip("PatrolBoat", ["A", 5], "vertical");
     expect(board.gameBoard[4].occupied).toBe(true);

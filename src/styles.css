@@ -91,7 +91,7 @@ h6 {
   grid-template-rows: repeat(10, 1fr);
 
   > .grid-div {
-    background-color: skyblue;
+    background-color: rgb(126, 183, 232);
     border: 1px, black, solid;
     transition: all 0.2s ease-in-out;
     display: grid;
@@ -101,7 +101,7 @@ h6 {
   }
 
   > .grid-div[data-occupied="true"] {
-    background-color: red;
+    background-color: rgb(68, 136, 173);
   }
 
   > .grid-div:hover {

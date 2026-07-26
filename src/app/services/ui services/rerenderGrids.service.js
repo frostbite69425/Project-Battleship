@@ -1,7 +1,6 @@
 import elementFactory from "../../utils/ui utils/elementFactory.utility.js";
-import shipHead from "../../../assets/icons/startShip.png";
-import shipMid from "../../../assets/icons/midShip.png";
-import shipEnd from "../../../assets/icons/endShip.png";
+
+import shipSprites from "../../utils/ui utils/shipSprites.utility.js";
 
 const rerenderGrids = (board) => {
   const gridDivs = document.querySelectorAll(".grid-holder .grid-div");
@@ -14,7 +13,8 @@ const rerenderGrids = (board) => {
     gridDiv.dataset.shot = grid.shot;
     gridDiv.innerHTML = "";
     if (grid.ship !== null) {
-      gridDiv.dataset.shipType = grid.ship.constructor.name;
+      let shipType = grid.ship.constructor.name;
+      gridDiv.dataset.shipType = shipType;
       let shipGridImg = elementFactory("img", "ship-grid-img");
       shipGridImg.domElement.dataset.shipType = grid.ship.constructor.name;
       gridDiv.appendChild(shipGridImg.domElement);
@@ -23,12 +23,12 @@ const rerenderGrids = (board) => {
       }
       if (grid.readHeadNode()) {
         gridDiv.dataset.headNode = grid.readHeadNode();
-        shipGridImg.domElement.src = shipHead;
+        shipGridImg.domElement.src = shipSprites[shipType].shipHead;
       } else if (grid.readEndNode()) {
         gridDiv.dataset.endNode = grid.readEndNode();
-        shipGridImg.domElement.src = shipEnd;
+        shipGridImg.domElement.src = shipSprites[shipType].shipEnd;
       } else {
-        shipGridImg.domElement.src = shipMid;
+        shipGridImg.domElement.src = shipSprites[shipType].shipMid;
       }
     } else {
       gridDiv.removeAttribute("data-ship-type");

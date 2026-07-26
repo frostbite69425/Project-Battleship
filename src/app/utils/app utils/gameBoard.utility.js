@@ -239,7 +239,10 @@ class GameBoard {
     const endXIndex = validX.indexOf(endX);
     const endIndex = endXIndex * 10 + endY - 1;
 
-    if (this.gameBoard[endIndex].occupied) {
+    if (
+      this.gameBoard[endIndex].occupied &&
+      this.gameBoard[endIndex].ship.constructor.name !== ship.constructor.name
+    ) {
       throw new Error(
         "You cannot relocate this ship to an already occupied grid!",
       );
@@ -254,7 +257,10 @@ class GameBoard {
 
     if (layout == "horizontal") {
       for (let i = endIndex; i <= validEndTail[layout]; i++) {
-        if (this.gameBoard[i].occupied) {
+        if (
+          this.gameBoard[i].occupied &&
+          this.gameBoard[i].ship.constructor.name !== ship.constructor.name
+        ) {
           throw new Error(
             "You cannot relocate this ship to an already occupied grid!",
           );
@@ -262,7 +268,10 @@ class GameBoard {
       }
     } else if (layout == "vertical") {
       for (let i = endIndex; i <= validEndTail[layout]; i = i + 10) {
-        if (this.gameBoard[i].occupied) {
+        if (
+          this.gameBoard[i].occupied &&
+          this.gameBoard[i].ship.constructor.name !== ship.constructor.name
+        ) {
           throw new Error(
             "You cannot relocate this ship to an already occupied grid!",
           );

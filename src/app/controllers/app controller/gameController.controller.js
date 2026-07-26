@@ -5,6 +5,8 @@ let defender;
 
 class Game {
   #turn;
+  #attacker;
+  #defender;
   constructor(
     singlePlayer = true,
     playerOneName = "player",
@@ -20,6 +22,8 @@ class Game {
     this.playerTwo.name = playerTwoName;
     this.singlePlayer = singlePlayer;
     this.#turn = 1;
+    this.#attacker = this.playerOne;
+    this.#defender = this.playerTwo;
   }
 
   finishSetup(player) {
@@ -65,25 +69,25 @@ class Game {
   }
 
   playRound([x, y]) {
-    attacker = this.playerOne;
-    defender = this.playerTwo;
     if (!this.playerOne.setup || !this.playerTwo.setup) {
       throw new Error(
         `Cannot play round without first setting up the ships for both players!`,
       );
     }
-    if (this.#turn % 2 === 0) {
-      defender = this.playerOne;
-      attacker = this.playerTwo;
-    }
-    if (!attacker.allShipsSunk() && !defender.allShipsSunk()) {
+
+    if (!this.#attacker.allShipsSunk() && !this.#defender.allShipsSunk()) {
       this.#turn++;
-      defender.receiveAttack([x, y]);
+      this.#defender.receiveAttack([x, y]);
+      if (!this.#defender.shipHit([x, y])) {
+        let temp = this.#attacker;
+        this.#attacker = this.#defender;
+        this.#defender = temp;
+      }
     } else {
-      if (attacker.allShipsSunk()) {
-        return `Game over! ${defender.name} wins!`;
+      if (this.#attacker.allShipsSunk()) {
+        return `Game over! ${this.#defender.name} wins!`;
       } else {
-        return `Game over! ${attacker.name} wins!`;
+        return `Game over! ${this.#attacker.name} wins!`;
       }
     }
   }

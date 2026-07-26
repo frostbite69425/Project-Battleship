@@ -640,55 +640,32 @@ describe("Game logic", () => {
     expect(game.playerTwo.allShipsSunk()).toBe(false);
 
     game.playRound(["A", 1]);
-    expect(game.playerOne.shot(["A", 1])).toBe(true);
-    expect(game.playerOne.shipHit(["A", 1])).toBe(true);
+    expect(game.playerTwo.shot(["A", 1])).toBe(true);
+    expect(game.playerTwo.shipHit(["A", 1])).toBe(false);
+    expect(game.playerTwo.allShipsSunk()).toBe(false);
+
+    game.playRound(["G", 1]);
+    expect(game.playerOne.shot(["G", 1])).toBe(true);
+    expect(game.playerOne.shipHit(["G", 1])).toBe(false);
     expect(game.playerOne.allShipsSunk()).toBe(false);
 
     game.playRound(["G", 1]);
-    expect(game.playerTwo.shot(["G", 1])).toBe(true);
-    expect(game.playerTwo.shipHit(["G", 1])).toBe(true);
-    expect(game.playerTwo.allShipsSunk()).toBe(false);
-
-    game.playRound(["B", 1]);
     game.playRound(["H", 1]);
-    game.playRound(["C", 1]);
     game.playRound(["I", 1]);
-    game.playRound(["D", 1]);
-
     game.playRound(["J", 1]);
-
-    game.playRound(["E", 1]);
     game.playRound(["F", 2]);
-    game.playRound(["A", 2]);
     game.playRound(["G", 2]);
-    game.playRound(["B", 2]);
     game.playRound(["H", 2]);
-    game.playRound(["C", 2]);
-
     game.playRound(["I", 2]);
-
-    game.playRound(["D", 2]);
     game.playRound(["F", 3]);
-    game.playRound(["A", 3]);
     game.playRound(["G", 3]);
-    game.playRound(["B", 3]);
-
     game.playRound(["H", 3]);
-
-    game.playRound(["C", 3]);
     game.playRound(["F", 4]);
-    game.playRound(["A", 4]);
     game.playRound(["G", 4]);
-    game.playRound(["B", 4]);
-
     game.playRound(["H", 4]);
-
-    game.playRound(["C", 4]);
     game.playRound(["F", 5]);
-    game.playRound(["A", 5]);
     game.playRound(["G", 5]);
-
-    expect(game.playRound(["B", 5])).toBe("Game over! Frost wins!");
+    expect(game.playRound(["A", 5])).toBe("Game over! Frost wins!");
   });
 
   test("playRound() throws for ships not being set up for both players", () => {

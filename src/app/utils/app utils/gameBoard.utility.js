@@ -179,6 +179,7 @@ class GameBoard {
     };
 
     if (
+      validTail.vertical < 100 &&
       this.gameBoard[validTail.vertical].occupied &&
       this.gameBoard[validTail.vertical].ship.length === headNode.ship.length
     ) {
@@ -201,6 +202,7 @@ class GameBoard {
       headNode.toggleHeadNode();
       this.gameBoard[validTail.vertical].toggleEndNode();
     } else if (
+      validTail.horizontal < 100 &&
       this.gameBoard[validTail.horizontal].occupied &&
       this.gameBoard[validTail.horizontal].ship.length === headNode.ship.length
     ) {
@@ -340,6 +342,10 @@ class GameBoard {
       vertical: grid.headNodeIndex + (headNode.ship.length - 1) * 10,
       horizontal: grid.headNodeIndex + headNode.ship.length - 1,
     };
+
+    if (validTail.vertical > 99 || validTail.horizontal > 99) {
+      throw new Error("Invalid rotation attempted!");
+    }
 
     if (
       this.gameBoard[validTail.vertical].occupied &&

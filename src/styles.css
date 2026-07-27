@@ -100,8 +100,8 @@ h6 {
     width: 50px;
   }
 
-  > .grid-div[data-occupied="true"] {
-    background-color: rgb(68, 136, 173);
+  > .grid-div[data-shot="true"] {
+    background-color: rgb(46, 47, 48);
   }
 
   > .grid-div:hover {
@@ -111,7 +111,7 @@ h6 {
 }
 
 .ship-icon {
-  max-width: 100px;
+  max-width: 70px;
   height: auto;
 }
 
@@ -172,5 +172,11 @@ h6 {
     display: grid;
     place-items: center;
     background-color: black;
+  }
+}
+
+.hide-ship {
+  > img {
+    display: none;
   }
 }

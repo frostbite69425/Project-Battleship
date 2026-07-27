@@ -8,6 +8,7 @@ import rerenderGrids from "./rerenderGrids.service.js";
 import dragAndDrop from "./dragAndDrop.service.js";
 import rotateShip from "./rotateShip.service.js";
 import notification from "./notification.service.js";
+import instructions from "../../components/instructions.component.js";
 
 const setupPage = (game, activePlayer = game.playerOne) => {
   const content = document.querySelector(".content");
@@ -17,6 +18,10 @@ const setupPage = (game, activePlayer = game.playerOne) => {
 
   const singlePlayer = game.gameMode;
 
+  const phaseDiv = elementFactory("h2", "phase-header");
+  phaseDiv.insertText("Setup phase");
+
+  const instructionsDiv = instructions();
   const shipContainer = shipHolder();
   const boardContainer = board(activePlayer);
   const buttonDiv = elementFactory("div", "btn-div container");
@@ -46,6 +51,7 @@ const setupPage = (game, activePlayer = game.playerOne) => {
       singlePlayer == true &&
       playerOneSetup
     ) {
+      randomiseSetup(game, game.playerTwo);
       battlePage(game);
     } else if (
       activePlayer == game.playerOne &&
@@ -60,7 +66,13 @@ const setupPage = (game, activePlayer = game.playerOne) => {
     }
   });
 
-  content.append(shipContainer, boardContainer, buttonDiv.domElement);
+  content.append(
+    phaseDiv.domElement,
+    instructionsDiv,
+    shipContainer,
+    boardContainer,
+    buttonDiv.domElement,
+  );
 
   dragAndDrop(game, activePlayer);
   rotateShip(game, activePlayer);

@@ -12,12 +12,12 @@ const newGameController = () => {
   });
 
   singlePlayerBtn.addEventListener("click", () => {
-    const game = new Game(true);
+    const game = new Game(true, "Player One", "Computer");
     setupPage(game);
   });
 
   multiPlayerBtn.addEventListener("click", () => {
-    const game = new Game(false);
+    const game = new Game(false, "Player One", "Player Two");
     setupPage(game);
   });
 };

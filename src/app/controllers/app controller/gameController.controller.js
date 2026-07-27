@@ -1,8 +1,5 @@
 import Player from "../../utils/app utils/player.utility.js";
 
-let attacker;
-let defender;
-
 class Game {
   #turn;
   #attacker;
@@ -90,6 +87,18 @@ class Game {
         return `Game over! ${this.#attacker.name} wins!`;
       }
     }
+  }
+
+  attackerWin() {
+    return this.#attacker.allShipsSunk();
+  }
+
+  attacker() {
+    return this.#attacker;
+  }
+
+  defender() {
+    return this.#defender;
   }
 
   getTurn() {

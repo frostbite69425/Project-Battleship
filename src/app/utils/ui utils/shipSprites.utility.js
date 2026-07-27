@@ -12,6 +12,7 @@ import subMid from "../../../assets/icons/subMid.png";
 import subHead from "../../../assets/icons/subHead.png";
 import patrolEnd from "../../../assets/icons/patrolEnd.png";
 import patrolHead from "../../../assets/icons/patrolHead.png";
+import hit from "../../../assets/icons/hit.png";
 
 const shipSprites = {
   Battleship: {
@@ -42,6 +43,8 @@ const shipSprites = {
     shipHead: patrolHead,
     shipEnd: patrolEnd,
   },
+
+  hit: hit,
 };
 
 export default shipSprites;

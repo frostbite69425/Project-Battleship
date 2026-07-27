@@ -1,6 +1,6 @@
 import elementFactory from "../utils/ui utils/elementFactory.utility.js";
 
-const board = (player) => {
+const board = (player, id = false) => {
   const board = player.playerBoard();
   const parentBoardDiv = elementFactory("div", "parent-board-div");
   const boardNamePara = elementFactory("p", "board-name para");
@@ -8,6 +8,10 @@ const board = (player) => {
   const gridHolder = elementFactory("div", "grid-holder");
   for (let grid of board) {
     let gridDiv = elementFactory("div", "grid-div");
+    if (id) {
+      gridDiv.domElement.id = id;
+      gridDiv.domElement.dataset.playerName = player.name;
+    }
     gridDiv.domElement.dataset.xValue = grid.x;
     gridDiv.domElement.dataset.yValue = grid.y;
     gridDiv.domElement.dataset.occupied = grid.occupied;
@@ -24,8 +28,8 @@ const board = (player) => {
   }
 
   parentBoardDiv.domElement.append(
-    gridHolder.domElement,
     boardNamePara.domElement,
+    gridHolder.domElement,
   );
 
   return parentBoardDiv.domElement;

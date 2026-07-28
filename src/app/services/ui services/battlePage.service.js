@@ -27,7 +27,7 @@ const battlePage = (game) => {
   );
 
   rerenderBoards(game);
-  gameFlow(game);
+  gameFlow(game, singlePlayer);
 };
 
 export default battlePage;

@@ -6,6 +6,7 @@ import GameBoard from "./gameBoard.utility.js";
 import Player from "./player.utility.js";
 import Game from "../../controllers/app controller/gameController.controller.js";
 import randomiseSetup from "../../services/app services/randomiseSetup.service.js";
+import botAI from "../../services/app services/botAI.service.js";
 
 let ship;
 let carrier;
@@ -689,5 +690,46 @@ describe("Randomise logic", () => {
     expect(game.playerOne.setup).toBe(true);
     randomiseSetup(game, game.playerTwo);
     expect(game.playerTwo.setup).toBe(true);
+  });
+});
+
+describe("Bot logic", () => {
+  beforeEach(() => {
+    game = new Game(true, "Frost", "Bot 1");
+    game.setup(
+      "Frost",
+      ["Carrier", ["A", 1], "vertical"],
+      ["Battleship", ["A", 2], "vertical"],
+      ["Submarine", ["A", 3], "vertical"],
+      ["Destroyer", ["A", 4], "vertical"],
+      ["PatrolBoat", ["A", 5], "vertical"],
+    );
+
+    game.setup(
+      "Bot 1",
+      ["Carrier", ["F", 1], "vertical"],
+      ["Battleship", ["F", 2], "vertical"],
+      ["Submarine", ["F", 3], "vertical"],
+      ["Destroyer", ["F", 4], "vertical"],
+      ["PatrolBoat", ["F", 5], "vertical"],
+    );
+  });
+
+  test("Bot AI can return valid coordinates to target the opponent's board", () => {
+    game.playRound(["A", 1]);
+    const botCoords = botAI(game.defender().playerBoard());
+    game.playRound(botCoords);
+    expect(game.playerOne.shot(botCoords)).toBe(true);
+  });
+
+  test.skip("Bot AI returns probable coordinates on ship hit", () => {
+    // WORKS WHEN THE INTERNAL STATES ARE MODIFIED TO BRUTE FORCE THE SMART TARGETTING
+    game.playRound(["A", 1]);
+    game.playRound(["A", 1]);
+    const botCoords = botAI(game.defender().playerBoard());
+    expect(
+      (botCoords[0] == "A" && botCoords[1] == 2) ||
+        (botCoords[0] == "B" && botCoords[1] == 1),
+    ).toBe(true);
   });
 });

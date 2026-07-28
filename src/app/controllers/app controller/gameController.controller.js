@@ -90,7 +90,7 @@ class Game {
   }
 
   attackerWin() {
-    return this.#attacker.allShipsSunk();
+    return this.#defender.allShipsSunk();
   }
 
   attacker() {

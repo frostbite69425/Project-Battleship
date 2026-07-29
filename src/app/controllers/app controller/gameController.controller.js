@@ -14,6 +14,7 @@ class Game {
       this.playerTwo = new Player();
     } else {
       this.playerTwo = new Player(true);
+      this.passStatus = true;
     }
     this.playerOne.name = playerOneName;
     this.playerTwo.name = playerTwoName;
@@ -21,6 +22,10 @@ class Game {
     this.#turn = 1;
     this.#attacker = this.playerOne;
     this.#defender = this.playerTwo;
+  }
+
+  togglePass() {
+    this.passStatus = this.passStatus == true ? false : true;
   }
 
   finishSetup(player) {

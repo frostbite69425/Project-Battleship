@@ -1,5 +1,3 @@
-let lastTurnHit = false;
-
 const validX = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 function getRandomIntInclusive(min, max) {
@@ -102,15 +100,6 @@ function pushPriorityMoves(index, orientation) {
 }
 
 const botAI = (defenderGameboard) => {
-  console.log(
-    {
-      lastTurnHit,
-      lastHitIndex,
-      validMoves,
-      priorityGrids,
-    },
-    hitIndices.length,
-  );
   if (validMoves.length > 0 || priorityGrids.length > 0) {
     let index;
     let xCoord;
@@ -142,11 +131,8 @@ const botAI = (defenderGameboard) => {
     hitIndices.push(index);
 
     if (defenderGameboard[index].ship) {
-      lastTurnHit = true;
       lastHitIndex = index;
       pushPriorityMoves(lastHitIndex, validMove.orientation);
-    } else {
-      lastTurnHit = false;
     }
 
     return [xCoord, yCoord];
@@ -168,13 +154,9 @@ const botAI = (defenderGameboard) => {
     hitIndices.push(index);
 
     if (defenderGameboard[index].ship) {
-      lastTurnHit = true;
       lastHitIndex = index;
       pushValidMoves(randomXIndex, randomYIndex);
-    } else {
-      lastTurnHit = false;
     }
-
     return [x, y];
   }
 };

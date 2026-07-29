@@ -8,6 +8,22 @@ const randomiseBtn = () => {
   return randomiseBtn.domElement;
 };
 
+const passDeviceBtn = () => {
+  const passDeviceBtn = elementFactory("button", "pass-device-btn btn");
+  passDeviceBtn.domElement.type = "button";
+  passDeviceBtn.insertText("Pass device");
+
+  return passDeviceBtn.domElement;
+};
+
+const showBoardsBtn = () => {
+  const showBoardsBtn = elementFactory("button", "show-boards-btn hidden btn");
+  showBoardsBtn.domElement.type = "button";
+  showBoardsBtn.insertText("Show boards");
+
+  return showBoardsBtn.domElement;
+};
+
 const savePositionBtn = () => {
   const savePositionBtn = elementFactory("button", "save-position-btn btn");
   savePositionBtn.domElement.type = "button";
@@ -67,4 +83,6 @@ export {
   singlePlayerBtn,
   multiplayerBtn,
   clearBoardBtn,
+  passDeviceBtn,
+  showBoardsBtn,
 };

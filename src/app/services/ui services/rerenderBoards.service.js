@@ -1,7 +1,7 @@
 import elementFactory from "../../utils/ui utils/elementFactory.utility.js";
 import shipSprites from "../../utils/ui utils/shipSprites.utility.js";
 
-const rerenderBoards = (game) => {
+const rerenderBoards = (game, twoPlayerRendering = false) => {
   const boardOne = document.querySelectorAll("#board-one");
   const boardTwo = document.querySelectorAll("#board-two");
 
@@ -21,7 +21,9 @@ const rerenderBoards = (game) => {
   for (let i = 0; i < attackerBoard.length; i++) {
     let attGridDiv = attackerBoard[i];
     let defGridDiv = defenderBoard[i];
-    defGridDiv.innerHTML = "";
+    if (!twoPlayerRendering) {
+      defGridDiv.innerHTML = "";
+    }
     defGridDiv.dataset.occupied = false;
 
     let attGrid = attackerGameboard[i];
@@ -29,14 +31,18 @@ const rerenderBoards = (game) => {
 
     attGridDiv.dataset.occupied = attGrid.occupied;
     attGridDiv.dataset.shot = attGrid.shot;
-    attGridDiv.innerHTML = "";
+    if (!twoPlayerRendering) {
+      attGridDiv.innerHTML = "";
+    }
 
     if (attGrid.ship !== null) {
       let shipType = attGrid.ship.constructor.name;
       attGridDiv.dataset.shipType = shipType;
       let shipGridImg = elementFactory("img", "ship-grid-img");
       shipGridImg.domElement.dataset.shipType = attGrid.ship.constructor.name;
-      attGridDiv.appendChild(shipGridImg.domElement);
+      if (!twoPlayerRendering) {
+        attGridDiv.appendChild(shipGridImg.domElement);
+      }
       if (attGrid.orientation === "vertical") {
         shipGridImg.domElement.classList.add("vertical-grid");
       }
@@ -61,7 +67,9 @@ const rerenderBoards = (game) => {
       defGridDiv.dataset.shot = defGrid.shot;
       let shipGridImg = elementFactory("img", "ship-grid-img");
       shipGridImg.domElement.dataset.shipType = defGrid.ship.constructor.name;
-      defGridDiv.appendChild(shipGridImg.domElement);
+      if (!twoPlayerRendering) {
+        defGridDiv.appendChild(shipGridImg.domElement);
+      }
       if (defGrid.orientation === "vertical") {
         shipGridImg.domElement.classList.add("vertical-grid");
       }

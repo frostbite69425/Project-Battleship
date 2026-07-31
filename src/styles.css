@@ -187,3 +187,26 @@ h6 {
     display: none;
   }
 }
+
+.grid-x-coords {
+  display: flex;
+  max-width: 500px;
+  margin-left: 50px;
+  > div {
+    min-width: 50px;
+    display: grid;
+    place-items: center;
+  }
+}
+
+.bottom-container {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  > .grid-y-coords {
+    > div {
+      min-height: 50px;
+      display: grid;
+      place-items: center;
+    }
+  }
+}

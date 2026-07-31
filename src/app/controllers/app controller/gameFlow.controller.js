@@ -2,6 +2,7 @@ import rerenderBoards from "../../services/ui services/rerenderBoards.service.js
 import botAI from "../../services/app services/botAI.service.js";
 import notification from "../../services/ui services/notification.service.js";
 import passDeviceController from "../ui controller/passDevice.controller.js";
+import winScreen from "../../services/ui services/winScreen.service.js";
 
 const gameFlow = (game, singlePlayer = true) => {
   const turnDiv = document.querySelector(".turn-div");
@@ -9,7 +10,9 @@ const gameFlow = (game, singlePlayer = true) => {
   turnDiv.textContent = `Turn: ${game.getTurn()}`;
 
   const gridDivs = document.querySelectorAll(".grid-div");
-  passDeviceController(game);
+  if (!singlePlayer) {
+    passDeviceController(game);
+  }
 
   gridDivs.forEach((grid) => {
     grid.addEventListener("click", () => {
@@ -18,7 +21,7 @@ const gameFlow = (game, singlePlayer = true) => {
       if (game.attacker().name !== grid.dataset.playerName) {
         let xValue = grid.dataset.xValue;
         let yValue = Number(grid.dataset.yValue);
-        if (!game) {
+        if (!game.attackerWin()) {
           // CONTINUE FROM HERE
           try {
             if (singlePlayer) {
@@ -41,9 +44,13 @@ const gameFlow = (game, singlePlayer = true) => {
             if (game.attackerWin()) {
               notification(`${game.attacker().name} wins!`, "info");
               const passDeviceBtn = document.querySelector(".pass-device-btn");
-              passDeviceBtn.classList.toggle("hidden");
+              if (!singlePlayer) {
+                passDeviceBtn.classList.toggle("hidden");
+              }
+              winScreen();
             }
           } catch (error) {
+            console.error(error);
             notification(error, "danger");
           }
 
@@ -55,6 +62,7 @@ const gameFlow = (game, singlePlayer = true) => {
 
               if (game.attackerWin()) {
                 notification(`${game.attacker().name} wins!`);
+                winScreen();
               }
             }
           }

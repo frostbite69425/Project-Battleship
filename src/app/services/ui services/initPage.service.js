@@ -4,6 +4,9 @@ import newGameController from "../../controllers/ui controller/newGame.controlle
 
 const initPage = () => {
   const content = document.querySelector(".content");
+  while (content.lastChild) {
+    content.removeChild(content.firstChild);
+  }
   const newGameBtn = buttons.newGameBtn();
   const playerModeHolder = elementFactory(
     "div",

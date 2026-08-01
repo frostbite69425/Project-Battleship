@@ -1,5 +1,6 @@
 import rerenderBoards from "../../services/ui services/rerenderBoards.service.js";
-import botAI from "../../services/app services/botAI.service.js";
+// import botAI from "../../services/app services/botAI.service.js";
+import BotAI from "../../services/app services/botAI.service.js";
 import notification from "../../services/ui services/notification.service.js";
 import passDeviceController from "../ui controller/passDevice.controller.js";
 import winScreen from "../../services/ui services/winScreen.service.js";
@@ -10,8 +11,11 @@ const gameFlow = (game, singlePlayer = true) => {
   turnDiv.textContent = `Turn: ${game.getTurn()}`;
 
   const gridDivs = document.querySelectorAll(".grid-div");
+  let bot;
   if (!singlePlayer) {
     passDeviceController(game);
+  } else {
+    bot = new BotAI();
   }
 
   gridDivs.forEach((grid) => {
@@ -22,7 +26,6 @@ const gameFlow = (game, singlePlayer = true) => {
         let xValue = grid.dataset.xValue;
         let yValue = Number(grid.dataset.yValue);
         if (!game.attackerWin()) {
-          // CONTINUE FROM HERE
           try {
             if (singlePlayer) {
               game.playRound([xValue, yValue]);
@@ -56,7 +59,7 @@ const gameFlow = (game, singlePlayer = true) => {
 
           if (game.attacker().type === "computer") {
             while (game.attacker().type === "computer" && !game.attackerWin()) {
-              let botCoords = botAI(game.defender().playerBoard());
+              let botCoords = bot.aiMove(game.defender().playerBoard());
               game.playRound(botCoords);
               rerenderBoards(game);
 

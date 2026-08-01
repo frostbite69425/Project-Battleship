@@ -19,6 +19,7 @@ let board;
 let human;
 let computer;
 let game;
+let bot;
 
 describe("Ship logic", () => {
   beforeEach(() => {
@@ -695,6 +696,7 @@ describe("Randomise logic", () => {
 
 describe("Bot logic", () => {
   beforeEach(() => {
+    bot = new botAI();
     game = new Game(true, "Frost", "Bot 1");
     game.setup(
       "Frost",
@@ -717,16 +719,20 @@ describe("Bot logic", () => {
 
   test("Bot AI can return valid coordinates to target the opponent's board", () => {
     game.playRound(["A", 1]);
-    const botCoords = botAI(game.defender().playerBoard());
+    const botCoords = bot.aiMove(game.defender().playerBoard());
     game.playRound(botCoords);
     expect(game.playerOne.shot(botCoords)).toBe(true);
   });
 
-  test.skip("Bot AI returns probable coordinates on ship hit", () => {
-    // WORKS WHEN THE INTERNAL STATES ARE MODIFIED TO BRUTE FORCE THE SMART TARGETTING
+  test("Bot AI returns probable coordinates on ship hit", () => {
+    // WORKS WHEN THE INTERNAL STATES ARE MODIFIED TO BRUTE FORCE THE SMART TARGETING
     game.playRound(["A", 1]);
-    game.playRound(["A", 1]);
-    const botCoords = botAI(game.defender().playerBoard());
+    bot.lastHitIndex = 0;
+    bot.priorityGrids = [
+      { coords: ["A", 2], orientation: "horizontal" },
+      { coords: ["B", 1], orientation: "vertical" },
+    ];
+    const botCoords = bot.aiMove(game.defender().playerBoard());
     expect(
       (botCoords[0] == "A" && botCoords[1] == 2) ||
         (botCoords[0] == "B" && botCoords[1] == 1),

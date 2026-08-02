@@ -1,5 +1,4 @@
 import rerenderBoards from "../../services/ui services/rerenderBoards.service.js";
-// import botAI from "../../services/app services/botAI.service.js";
 import BotAI from "../../services/app services/botAI.service.js";
 import notification from "../../services/ui services/notification.service.js";
 import passDeviceController from "../ui controller/passDevice.controller.js";

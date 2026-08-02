@@ -35,7 +35,7 @@ const savePositionBtn = () => {
 const newGameBtn = () => {
   const newGameBtn = elementFactory("button", "new-game-btn btn");
   newGameBtn.domElement.type = "button";
-  newGameBtn.insertText("New Game");
+  newGameBtn.insertText("Start New Game");
 
   return newGameBtn.domElement;
 };
@@ -62,7 +62,7 @@ const singlePlayerBtn = () => {
 const multiplayerBtn = () => {
   const multiplayerBtn = elementFactory("button", "multiplayer-btn btn hidden");
   multiplayerBtn.domElement.type = "button";
-  multiplayerBtn.insertText("Multiplayer Mode");
+  multiplayerBtn.insertText("Two Player Mode");
 
   return multiplayerBtn.domElement;
 };

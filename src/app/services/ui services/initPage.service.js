@@ -1,6 +1,8 @@
 import * as buttons from "../../components/buttons.component.js";
 import elementFactory from "../../utils/ui utils/elementFactory.utility.js";
 import newGameController from "../../controllers/ui controller/newGame.controller.js";
+import gitRedirectController from "../../controllers/ui controller/gitRedirect.controller.js";
+import themeSwitcher from "../../controllers/ui controller/theme.controller.js";
 
 const initPage = () => {
   const content = document.querySelector(".content");
@@ -19,6 +21,8 @@ const initPage = () => {
   content.append(newGameBtn, playerModeHolder.domElement);
 
   newGameController();
+  themeSwitcher();
+  gitRedirectController();
 };
 
 export default initPage;

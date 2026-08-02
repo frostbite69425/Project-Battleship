@@ -36,7 +36,7 @@ class GameBoard {
 
     if (xIndex === -1 || headY > 10 || headY < 1) {
       throw new Error(
-        "You have invoked placeShip with invalid arguments! Please try agian with a valid ship and valid start coordinates and orientation!",
+        "You have invoked placeShip with invalid arguments! Please try again with a valid ship and valid start coordinates and orientation!",
       );
     }
 

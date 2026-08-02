@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "Google sans";
+  src: url("./assets//fonts/Google_fonts/Google_Sans_Flex/GoogleSansFlex-VariableFont_GRAD\,ROND\,opsz\,slnt\,wdth\,wght.ttf");
+}
+
+@font-face {
+  font-family: "Fancy";
+  src: url("./assets//fonts/Google_fonts/Grenze_Gotisch/GrenzeGotisch-VariableFont_wght.ttf");
+}
 /* 1. Use a more-intuitive box-sizing model */
 *,
 *::before,
@@ -74,30 +83,289 @@ h6 {
   isolation: isolate;
 }
 
+::view-transition-new(root) {
+  animation: circle-in 1300ms;
+}
+
+@keyframes circle-in {
+  from {
+    clip-path: circle(0% at 50% 0%);
+  }
+
+  to {
+    clip-path: circle(120% at 50% 0%);
+  }
+}
+
+:root {
+  /* hsl (fallback color) */
+  --bg-dark: hsl(206 100% 2%);
+  --bg: hsl(195 100% 2%);
+  --bg-light: hsl(190 100% 3%);
+  --text: hsl(189, 100%, 92%);
+  --text-muted: hsl(188, 16%, 46%);
+  --highlight: hsl(187 100% 11%);
+  --border: hsl(188 100% 8%);
+  --border-muted: hsl(191 100% 5%);
+  --primary: hsl(185 100% 27%);
+  --secondary: hsl(6 100% 75%);
+  --danger: hsl(7 89% 66%);
+  --warning: hsl(54 100% 25%);
+  --success: hsl(162 100% 29%);
+  --info: hsl(217 100% 69%);
+  /* oklch */
+  --bg-dark: oklch(0.1 0.085 208);
+  --bg: oklch(0.15 0.085 208);
+  --bg-light: oklch(0.2 0.085 208);
+  --text: oklch(0.96 0.1 208);
+  --text-muted: oklch(0.76 0.1 208);
+  --highlight: oklch(0.5 0.17 208);
+  --border: oklch(0.4 0.17 208);
+  --border-muted: oklch(0.3 0.17 208);
+  --primary: oklch(0.76 0.17 208);
+  --secondary: oklch(0.76 0.17 28);
+  --danger: oklch(0.7 0.17 30);
+  --warning: oklch(0.7 0.17 100);
+  --success: oklch(0.7 0.17 160);
+  --info: oklch(0.7 0.17 260);
+  font-size: 10px;
+  font-family:
+    "Google sans",
+    Arial,
+    Helvetica,
+    sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+}
+
+body.light {
+  /* hsl (fallback color) */
+  --bg-dark: hsl(54 14% 88%);
+  --bg: hsl(54 26% 94%);
+  --bg-light: hsl(54 100% 99%);
+  --text: hsl(50 60% 3%);
+  --text-muted: hsl(53 10% 26%);
+  --highlight: hsl(53 100% 98%);
+  --border: hsl(53 6% 48%);
+  --border-muted: hsl(53 8% 60%);
+  --primary: hsl(53 100% 12%);
+  --secondary: hsl(240 32% 37%);
+  --danger: hsl(9 21% 41%);
+  --warning: hsl(52 23% 34%);
+  --success: hsl(147 19% 36%);
+  --info: hsl(217 22% 41%);
+  /* oklch */
+  --bg-dark: oklch(0.92 0.01 101);
+  --bg: oklch(0.96 0.01 101);
+  --bg-light: oklch(1 0.01 101);
+  --text: oklch(0.15 0.02 101);
+  --text-muted: oklch(0.4 0.02 101);
+  --highlight: oklch(1 0.02 101);
+  --border: oklch(0.6 0.02 101);
+  --border-muted: oklch(0.7 0.02 101);
+  --primary: oklch(0.4 0.1 101);
+  --secondary: oklch(0.4 0.1 281);
+  --danger: oklch(0.5 0.05 30);
+  --warning: oklch(0.5 0.05 100);
+  --success: oklch(0.5 0.05 160);
+  --info: oklch(0.5 0.05 260);
+}
+
+::backdrop {
+  background-color: var(--bg-dark);
+  opacity: 0.3;
+}
+
+body {
+  font-family: "Google Sans";
+  display: grid;
+  grid-template-rows: 10rem 1fr 10rem;
+  min-height: 100dvh;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  background-color: var(--bg-dark);
+  font-size: clamp(1.5rem, 2.7dvw, 2rem);
+  color: var(--text-muted);
+}
+
+button {
+  border-radius: 15px;
+  border: none;
+  background-color: var(--bg);
+  padding: 0.7rem 1.5rem;
+  box-shadow: 2px 5px 2px var(--bg-light);
+  transition: transform ease-in-out 0.3s;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+button:hover {
+  transform: scale(1.06);
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 1rem 0rem;
+  color: var(--text);
+  font-size: clamp(1.8rem, 4.5dvw, 3rem);
+  font-family: "Fancy";
+
+  > button {
+    position: absolute;
+    padding: 0.5rem 1.3rem;
+    right: 0;
+  }
+}
+
+footer {
+  padding: 2rem;
+  background-color: var(--bg);
+  color: var(--text);
+  border-radius: 15px;
+  position: relative;
+  display: grid;
+  place-items: center;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    gap: 15px;
+    background-color: var(--bg-light);
+    border-radius: 5px;
+    border-top: 1px solid var(--highlight);
+    transition: 200ms;
+
+    path {
+      fill: var(--text);
+    }
+  }
+
+  button .text {
+    color: var(--text);
+    font-weight: 700;
+    font-size: 1em;
+    transition: 200ms;
+  }
+}
+
+/* THE CONTENT GRID PLACE-ITEMS PROPERTY MIGHT CAUSE LAYOUT SHIFTS ON THE OTHER PAGES */
+
+.content {
+  display: grid;
+  place-items: center;
+  gap: 3rem;
+}
+
+.new-game-btn {
+  min-width: 30dvw;
+  padding: 2rem;
+  font-size: clamp(2rem, 4.5dvw, 3rem);
+  font-weight: 700;
+}
+
+.player-mode-holder {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 2rem;
+  font-size: clamp(2rem, 4.5dvw, 3rem);
+
+  > button {
+    min-width: 30dvw;
+    padding: 2rem;
+    font-weight: 700;
+  }
+}
+
+.instructions {
+  background-color: var(--bg);
+  padding: 1.5rem 2.5rem;
+  border-radius: 15px;
+  display: grid;
+  gap: 1.4rem;
+  max-width: clamp(30ch, 100dvw, 75ch);
+
+  > h3 {
+    font-weight: 700;
+    color: var(--text);
+  }
+  > ol {
+    list-style: upper-roman;
+    padding: 0rem 2rem;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+}
+
+.ship-holder-parent {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: 85rem;
+  border-radius: 15px;
+  background-color: var(--bg);
+  padding: 1.5rem 2.5rem;
+  > .ship-holder-div {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+    > .ship-holder {
+      background-color: var(--bg-light);
+      padding: 0rem 1rem;
+      border-radius: 15px;
+    }
+  }
+}
+
+.parent-board-div {
+  display: grid;
+  gap: 1rem;
+  background-color: var(--bg);
+  padding: 2.5rem;
+  padding-left: 1rem;
+
+  border-radius: 15px;
+
+  > .board-name {
+    font-weight: 700;
+    color: var(--text);
+    padding-left: 2.5rem;
+  }
+}
+
 .hidden {
   display: none;
 }
 
-.parent-board-div {
-  display: flex;
-  flex-direction: column;
-}
-
 .grid-holder {
   display: grid;
-  height: 500px;
-  width: 500px;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 27px);
+  grid-template-rows: repeat(10, 27px);
+  width: 100%;
 
   > .grid-div {
     background-color: rgb(126, 183, 232);
+    width: 27px;
+    height: 27px;
     border: 1px, black, solid;
     transition: all 0.2s ease-in-out;
     display: grid;
     place-items: center;
-    height: 50px;
-    width: 50px;
   }
 
   > .grid-div[data-shot="true"] {
@@ -108,6 +376,35 @@ h6 {
     transform: scale(1.1);
     border: 2px solid white;
   }
+}
+
+.grid-x-coords {
+  display: flex;
+  max-width: 100%;
+  margin-left: 10%;
+  > div {
+    width: 27px;
+    display: grid;
+    place-items: center;
+  }
+}
+
+.bottom-container {
+  display: grid;
+  grid-template-columns: 27px 1fr;
+  > .grid-y-coords {
+    > div {
+      min-height: 27px;
+      display: grid;
+      place-items: center;
+    }
+  }
+}
+
+.btn-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
 
 .ship-icon {
@@ -122,8 +419,8 @@ h6 {
 }
 
 .ship-grid-img {
-  height: 50px;
-  width: 50px;
+  height: 27px; /* needs media queries */
+  width: 27px; /* needs media queries */
 }
 
 .vertical-grid {
@@ -142,17 +439,40 @@ h6 {
   background-color: rgb(82, 82, 249);
 }
 
+dialog {
+  background-color: var(--bg);
+  color: var(--text);
+  > p {
+    font-weight: 700;
+    font-family: "Fancy";
+    font-size: min(2.5rem, 7dvw);
+  }
+  padding: max(7rem, 6%);
+  border: 0px;
+  border-radius: 15px;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  gap: 2rem;
+  > button {
+    border-top: 1px solid var(--highlight);
+    transition: all ease-in-out 0.3s;
+  }
+
+  > button:hover {
+    background-color: var(--text);
+    color: var(--bg-dark);
+  }
+}
+
 .alert-div {
   padding: 1rem;
   border-radius: 15px;
-  /* color: var(--text); */
   color: black;
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   align-items: center;
-  max-width: fit-content;
-  left: 50%;
-  transform: translate(-50%, 0);
+  max-width: 100%;
   gap: 2rem;
   position: fixed;
   top: 4rem;
@@ -188,25 +508,37 @@ h6 {
   }
 }
 
-.grid-x-coords {
-  display: flex;
-  max-width: 500px;
-  margin-left: 50px;
-  > div {
-    min-width: 50px;
-    display: grid;
-    place-items: center;
-  }
-}
+@media (min-width: 500px) {
+  .grid-holder {
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
 
-.bottom-container {
-  display: grid;
-  grid-template-columns: 50px 1fr;
-  > .grid-y-coords {
-    > div {
-      min-height: 50px;
-      display: grid;
-      place-items: center;
+    > .grid-div {
+      height: 50px;
+      width: 50px;
     }
+  }
+
+  .grid-x-coords {
+    > div {
+      width: 50px;
+    }
+  }
+
+  .bottom-container {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    > .grid-y-coords {
+      > div {
+        min-height: 50px;
+        display: grid;
+        place-items: center;
+      }
+    }
+  }
+
+  .ship-grid-img {
+    height: 50px;
+    width: 50px;
   }
 }
